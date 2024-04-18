@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",            // Use modern ECMAScript features
+    "module": "NodeNext",          // Use Node.js-style resolution for ECMAScript modules
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",            // Specify the output directory for compiled files
+    "rootDir": "./",               // Specify the root directory of input files
+    "strict": true,                // Enable all strict type-checking options
+    "esModuleInterop": true,       // Enables compatibility provisioning for non-module-based sources
+    "skipLibCheck": true,          // Skip type checking of all declaration files (*.d.ts)
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["**/*.ts"],          // Include all TypeScript files in the project
+  "exclude": ["node_modules"]      // Exclude the node_modules directory
+}
