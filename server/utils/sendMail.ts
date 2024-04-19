@@ -15,9 +15,13 @@ const sendMail = async (options: EmailOprions):Promise <void> => {
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
     service: process.env.SMTP_SERVICE,
+    secure: false,
     auth: {
       user: process.env.SMTP_EMAIL,
       pass: process.env.SMTP_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 
