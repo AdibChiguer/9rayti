@@ -35,7 +35,6 @@ const userSchema: Schema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please enter your password"],
     minlength: [6, "Your password must be at least 6 characters"],
     select: false
   },
@@ -69,12 +68,12 @@ userSchema.pre<IUser>("save", async function(next) {
 
 // sign access token
 userSchema.methods.signAccessToken = function() {
-  return jwt.sign({id: this._id}, process.env.ACCESS_TOKEN as string || '' );
+  return jwt.sign({id: this._id}, process.env.ACCESS_TOKEN as string || '' , {expiresIn: "15m"});
 };
 
 // sign refresh token
 userSchema.methods.signRefreshToken = function() {
-  return jwt.sign({id: this._id}, process.env.REFRESH_TOKEN as string || '');
+  return jwt.sign({id: this._id}, process.env.REFRESH_TOKEN as string || '' , {expiresIn: "3d"});
 };
 
 
