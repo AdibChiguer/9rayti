@@ -56,6 +56,7 @@ const reviewSchema: Schema = new mongoose.Schema({
     default: 0
   },
   comment: String,
+  commentReplies: [Object]
 });
 
 const linksSchema: Schema = new mongoose.Schema({
