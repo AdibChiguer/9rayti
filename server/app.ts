@@ -7,6 +7,9 @@ import { ErrorMiddleware } from './middleware/error';
 import userRouter from './routes/user.routes';
 import courseRouter from './routes/course.routes';
 import orderRouter from './routes/order.routes';
+import notificationRouter from './routes/notification.routes';
+import analyticsRouter from './routes/analytics.routes';
+import layoutRouter from './routes/layout.routes';
 
 
 // body parser
@@ -21,7 +24,7 @@ app.use(cors({
 }));
 
 // routes
-app.use('/api/v1', userRouter , courseRouter , orderRouter);
+app.use('/api/v1', userRouter , courseRouter , orderRouter , notificationRouter , analyticsRouter , layoutRouter);
 
 
 // testing api

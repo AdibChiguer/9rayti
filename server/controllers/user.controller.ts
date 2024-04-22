@@ -8,7 +8,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { accessTokenOptions , refreshTokenOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getUserById } from "../services/user.service";
+import { getAllUsersService, getUserById, updateUserRoleService } from "../services/user.service";
 import cloudinary from "cloudinary";
 
 // Register a new user => /api/v1/register
@@ -209,6 +209,8 @@ export const updateAccessToken = CatchAsyncError(
       res.cookie("access_token", access_token, accessTokenOptions);
       res.cookie("refresh_token", refresh_token, refreshTokenOptions);
 
+      await redis.set(user._id, JSON.stringify(user) , "EX" , 604800 );
+
       res.status(200).json({ success: true, access_token });
     } catch (error: any) {
       return next(new ErrorHandler(400, error.message));
@@ -375,6 +377,48 @@ export const updateProfilePicture = CatchAsyncError(async(req: Request, res: Res
     success: true,
     user,
   });
+
+  } catch (error: any){
+    return next(new ErrorHandler(400, error.message));
+  }
+});
+
+// get all users --- onlu for admin
+export const getAllUsers = CatchAsyncError(async(req: Request, res: Response, next: NextFunction) => {
+  try{
+    getAllUsersService(res);
+  } catch (error: any){
+    return next(new ErrorHandler(500, error.message));
+  }
+});
+
+// update user role --- only for admin
+export const updateUserRole = CatchAsyncError(async(req: Request, res: Response, next: NextFunction) => {
+  try{
+    const {id , role} = req.body;
+    updateUserRoleService(id, role, res);
+  } catch (error: any){
+    return next(new ErrorHandler(400, error.message));
+  }
+});
+
+// Delete user -- only for admin
+export const deleteUser = CatchAsyncError(async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {id} = req.params;
+    
+    const user = await userModel.findById(id);
+    if(!user){
+      return next(new ErrorHandler(400, "User not found"));
+    }
+
+    await user.deleteOne({id});
+    await redis.del(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
 
   } catch (error: any){
     return next(new ErrorHandler(400, error.message));
