@@ -19,7 +19,7 @@ const josefin = Josefin_Sans({
 export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${josefin.variable} !bg-white dark:bg-gradient-to-b dark:from-gray-900 duration-300`}>
+      <body className={`${poppins.variable} ${josefin.variable} !bg-white dark:bg-black box-border`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
