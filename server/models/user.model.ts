@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 require("dotenv").config();
 import jwt from "jsonwebtoken";
 
-const emailRegexPattern: RegExp = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+const emailRegexPattern: RegExp = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/;
 
 export interface IUser extends Document {
   name: string;

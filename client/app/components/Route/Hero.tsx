@@ -8,21 +8,21 @@ type Props = {};
 const Hero: FC<Props> = (props) => {
   return (
     <div className="w-full relative">
-      <div className="w-full bg-red-500 mt-[150px] lg:mt-[0px] text-center lg:text-left">
-        <h2 className="dark:text-white text-[#000000c7] text-[30px] px-3 w-full lg:text-[50px] font-[600] font-Josefin py-2 lg:leading-[75px] lg:w-[60%] md:w-[78%]">
-          Improve Your Online <br /> Learning Experience <br /> With Us For Free.
+      <div className="lg:w-[80%] w-[90%] mx-auto mt-[50px] text-left md:flex md:flex-col md:items-center">
+        <h2 className="dark:text-white text-[#0F172A] text-[30px] w-full lg:text-[50px] font-[600] font-Josefin py-2 lg:leading-[75px] lg:w-[90%] md:w-[95%]">
+          Improve Your Online Learning Experience <br /> With Us For Free.
         </h2>
         <br />
-        <p className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[18px] lg:!w-[55%] md:!w-[78%]">
+        <p className="dark:text-[#edfff4] text-[#0F172A] font-Josefin font-[600] text-[18px] lg:w-[66%] md:w-[95%]">
           We have all kinds of courses for you to learn from & 500k+ Online
           registered students. Find your desired course and start learning now.
         </p>
         <br />
         <br />
-        <div className="w-[90%] h-[50px] bg-transparent relative lg:w-[55%] md:w-[78%]">
+        <div className="w-[90%] h-[50px] bg-transparent relative lg:w-[55%] md:w-[95%]">
           <input
             placeholder="Search Courses..."
-            className="bg-transparent border dark:border-none dark:bg-[#575757] dark:placeholder:text-[#ffffffdd] rounded-[5px] p-2 w-full h-full outline-none text-[#0000004e] dark:text-[#ffffffe6] text-[20px] font-[500] font-Josefin"
+            className="bg-transparent border dark:border-none dark:bg-[#323e5b] placeholder:text-[#ffffffdd] dark:placeholder:text-[#ffffffdd] rounded-[5px] p-2 w-full h-full outline-none text-[#0000004e] dark:text-[#ffffffe6] text-[20px] font-[500] font-Josefin"
             type="search"
             value=""
           />
@@ -32,23 +32,25 @@ const Hero: FC<Props> = (props) => {
         </div>
         <br />
         <br />
-        <div className="w-[90%] flex items-center lg:w-[55%] md:w-[78%]">
-          <Image
-            alt=""
-            src={require("../../../public/assets/client-1.webp")}
-            className="rounded-full"
-          />
-          <Image
-            alt=""
-            src={require("../../../public/assets/client-2.webp")}
-            className="rounded-full ml-[-20px]"
-          />
-          <Image
-            alt=""
-            src={require("../../../public/assets/client-3.webp")}
-            className="rounded-full ml-[-20px]"
-          />
-          <p className="font-Josefin dark:text-[#edfff4] text-[#000000b3] lg:pl-3 text-[18px] font-[600]">
+        <div className="w-[90%] flex items-center lg:w-[55%] md:w-[95%] gap-[20px]">
+          <div className="flex items-center">
+            <Image
+              alt=""
+              src={require("../../../public/assets/client-1.webp")}
+              className="rounded-full"
+            />
+            <Image
+              alt=""
+              src={require("../../../public/assets/client-2.webp")}
+              className="rounded-full ml-[-20px]"
+            />
+            <Image
+              alt=""
+              src={require("../../../public/assets/client-3.webp")}
+              className="rounded-full ml-[-20px]"
+            />
+          </div>
+          <p className="font-Josefin dark:text-[#edfff4] text-[#0F172A] lg:pl-3 text-[18px] font-[600]">
             500K+ People already trusted us.{" "}
             <a className="dark:text-[#46e256] text-[crimson]" href="/courses">
               Join them now!
@@ -62,11 +64,3 @@ const Hero: FC<Props> = (props) => {
 };
 
 export default Hero;
-
-/*  
-Improve your online learning experience with 9rayti
-
-We have all kinds of courses for you to learn from & 500k+ Online registered students. Find your desired course and start learning now.
-
-500k+ people already trust us. Join them now!
-*/
