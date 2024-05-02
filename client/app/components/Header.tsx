@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assets/avatar.jpg";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -29,14 +29,13 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
   const { user } = useSelector((state:any) => state.auth);
   const { data , status } = useSession();
   const [socialAuth , {isSuccess , error}] = useSocialAuthMutation();
-  const [loginAcknowledged, setLoginAcknowledged] = useState(false);
+  const [logout, setLogout] = useState(false);
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
 
   useEffect(() => {
-    if (
-      // status === 'authenticated' && !loginAcknowledged && 
-      !user
-    ){
-      console.log(data);
+    if (!user){
       if (data){
         socialAuth({
           email: data?.user?.email,
@@ -45,18 +44,14 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
         });
       }
     }
-    if(isSuccess){
+    if(data === null && isSuccess){
       toast.success("Logged in successfully");
-      console.log("in");
     }
-    // setLoginAcknowledged(true);
-  }, [data, user, status])
+    if(data === null){
+      setLogout(true);
+    }
 
-  // useEffect(() => {
-  //   if (status === 'unauthenticated') {
-  //     setLoginAcknowledged(false);
-  //   }
-  // }, [status]);
+  }, [data, user, status])
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -108,9 +103,12 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                 user ? (
                   <Link href={"/profile"}>
                     <Image 
-                      src={user.avatar ? user.avatar : avatar }
+                      src={user.avatar ? user.avatar.url : avatar }
                       alt=""
+                      width={30}
+                      height={30}
                       className="w-[30px] h-[30px] rounded-full cursor-pointer"
+                      style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
                     />
                   </Link>
                 ) : (
