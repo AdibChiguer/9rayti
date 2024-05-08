@@ -84,3 +84,20 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111c43 ;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1b2a5e ;
+  border-radius: 10px;
+}
+
+/* ::-webkit-scrollbar-thumb:hover {
+  background: #32ae7e ;
+} */

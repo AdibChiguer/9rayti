@@ -453,3 +453,37 @@ export const deleteCourse = CatchAsyncError(async(req: Request, res: Response, n
     return next(new ErrorHandler(400, error.message));
   }
 });
+
+// getDriveID 
+function getDriveFileId(url:string) {
+  // Extract the file ID using a regular expression
+  var match = url.match(/\/file\/d\/([^/]+)\//);
+  
+  // If a match is found and the file ID is captured
+  if (match && match[1]) {
+    // Return the captured file ID
+    return match[1];
+  } else {
+    // Return null if no match is found
+    return null;
+  }
+}
+
+// generate video url
+export const generateVideoUrl = CatchAsyncError(async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {videoId} = req.body;
+    const fileId = getDriveFileId(videoId);
+    
+    const videoUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${process.env.GOOGLE_DRIVE_API_KEY}&v=.mp4`;
+
+    console.log("v:" + videoUrl);
+    
+    res.status(200).json({
+      success: true,
+      videoUrl,
+    });
+  } catch (error: any){
+    return next(new ErrorHandler(500, error.message));
+  }
+});
