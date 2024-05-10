@@ -36,11 +36,12 @@ interface itemProps {
 }
 
 const Item: FC<itemProps> = ({ title, to, icon, selected, setSelected }) => {
+
   return (
     <MenuItem
+      onClick={() => setSelected(title)}
       active={selected === title}
       icon={icon}
-      onClick={() => setSelected(title)}
     >
       <Typography className='!text-[16px] !font-Poppins'>{title}</Typography>
       <Link href={to}/>
@@ -48,11 +49,15 @@ const Item: FC<itemProps> = ({ title, to, icon, selected, setSelected }) => {
   )
 };
 
-const AdminSidebar = () => {
+type Props = {
+  selectedItem: string,
+}
+
+const AdminSidebar:FC<Props> = ({selectedItem}) => {
   const { user } = useSelector((state: any) => state.auth);
   const [logout , setLogout] = useState(false);
   const [isCollapsed , setIsCollapsed] = useState(false);
-  const [selected , setSelected] = useState('Dashboard');
+  const [selected , setSelected] = useState(`${selectedItem}`);
   const [mounted , setMounted] = useState(false);
   const { theme , setTheme } = useTheme();
 

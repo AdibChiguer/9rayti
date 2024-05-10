@@ -8,6 +8,7 @@ import {
   editCourse,
   generateVideoUrl,
   getAllCourses,
+  getAllCoursesForAdmin,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
@@ -68,13 +69,13 @@ courseRouter.put(
   addReplyToReview
 );
 
-// courseRouter.get(
-//   "/get-courses",
-//   updateAccessToken,
-//   isAuthenticated,
-//   authorizeRoles("admin"),
-//   getAllCoursesForAdmin
-// );
+courseRouter.get(
+  "/get-admin-courses",
+  updateAccessToken,
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getAllCoursesForAdmin
+);
 
 courseRouter.post("/get-gdrive-course", generateVideoUrl);
 
