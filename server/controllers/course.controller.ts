@@ -40,7 +40,11 @@ export const editCourse = CatchAsyncError(
     try {
       const data = req.body;
       const thumbnail = data.thumbnail;
-      if (thumbnail) {
+
+      const courseId = req.params.id;
+      const courseData = await CourseModel.findById(courseId) as any;
+
+      if (thumbnail && !thumbnail.startWith("https")) {
         await cloudinary.v2.uploader.destroy(data.thumbnail.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
@@ -52,7 +56,12 @@ export const editCourse = CatchAsyncError(
         };
       }
 
-      const courseId = req.params.id;
+      if (thumbnail && thumbnail.startWith("https")) {
+        data.thumbnail = {
+          public_id: courseData?.thumbnail.public_id,
+          url: courseData?.thumbnail.url,
+        };
+      }
 
       const course = await CourseModel.findByIdAndUpdate(
         courseId,
@@ -60,7 +69,7 @@ export const editCourse = CatchAsyncError(
         { new: true }
       );
 
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         course,
       });

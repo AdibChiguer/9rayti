@@ -9,6 +9,7 @@ import Loader from "../../Loader/Loader";
 import { format } from 'timeago.js'
 import { styles } from "@/app/styles/style";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 type Props = {};
 
@@ -21,9 +22,9 @@ const AllCourses = (props: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
+      setOpen(false); 
       refetch();
       toast.success("Course deleted successfully");
-      setOpen(false);
     }
     if (deleteError) {
       if ("data" in deleteError) {
@@ -46,12 +47,14 @@ const AllCourses = (props: Props) => {
       renderCell: (params: any) => {
         return (
           <>
-            <Button>
-              <FiEdit2
-                size={20}
-                className="dark:text-white text-[#0F172A]"
-              />
-            </Button>
+            <Link href={`/admin/edit-course/${params.row.id}`}>
+              <Button>
+                <FiEdit2
+                  size={20}
+                  className="dark:text-white text-[#0F172A]"
+                />
+              </Button>
+            </Link>
           </>
         );
       },
