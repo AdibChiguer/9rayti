@@ -16,12 +16,13 @@ type Props = {
 const EditCourse:FC<Props> = ({id}) => {
   const [editCourse , {isSuccess , error}] = useEditCourseMutation();
   const { data , refetch} = useGetAllCoursesQuery({}, {refetchOnMountOrArgChange: true});
-  const editCourseData = data && data.courses.find((course:any) => course.Pid === id);
+  const editCourseData = data && data.courses.find((course:any) => course._id === id);
+  // console.log("data" +data)
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Course Updated successfully");
-      redirect("/admin/all-courses");
+      redirect("/admin/courses");
     }
     if (error) {
       if ("data" in error) {
@@ -45,12 +46,13 @@ const EditCourse:FC<Props> = ({id}) => {
         demoUrl: editCourseData.demoUrl,
         thumbnail: editCourseData?.thumbnail?.url,
       });
-      setBenefits(editCourseData.benefits);
+      setBenifits(editCourseData.benifits);
       setPrerequisites(editCourseData.prerequisites);
-      setCourseContentData(editCourseData.courseContent);
+      setCourseContentData(editCourseData.courseData);
     }
   }, [editCourseData]);
 
+  // console.log("Edit:" + editCourseData);
   const [courseInfo, setCourseInfo] = useState({
     name: "",
     description: "",
@@ -61,7 +63,7 @@ const EditCourse:FC<Props> = ({id}) => {
     demoUrl: "",
     thumbnail: "",
   });
-  const [benefits, setBenefits] = useState([{ title: "" }]);
+  const [benifits, setBenifits] = useState([{ title: "" }]);
   const [prerequisites, setPrerequisites] = useState([{ title: "" }]);
   const [courseContentData, setCourseContentData] = useState([
     {
@@ -81,9 +83,9 @@ const EditCourse:FC<Props> = ({id}) => {
   const [courseData, setCourseData] = useState({});
 
   const handleSubmit = async () => {
-    // format benefits array
-    const formattedBenefits = benefits.map((benefit) => ({
-      title: benefit.title,
+    // format benifits array
+    const formattedBenifits = benifits.map((benifit) => ({
+      title: benifit.title,
     }));
     // format prerequisites array
     const formattedPrerequisites = prerequisites.map((prerequisite) => ({
@@ -101,7 +103,7 @@ const EditCourse:FC<Props> = ({id}) => {
       })),
       suggestions: content.suggestions,
     }));
-
+  
     // prepare our data object
     const data = {
       name: courseInfo.name,
@@ -113,20 +115,21 @@ const EditCourse:FC<Props> = ({id}) => {
       level: courseInfo.level,
       demoUrl: courseInfo.demoUrl,
       totalVideos: courseContentData.length,
-      benefits: formattedBenefits,
+      benifits: formattedBenifits,
       prerequisites: formattedPrerequisites,
       courseContent: formattedCourseContentData,
     };
-
-    // send data to the server
+  
     setCourseData(data);
   };
-
-  const handleCourseCreate = async (e:any) => {
-    const data = courseData;
-    await editCourse({id:editCourseData?._id , data});
-  }
-
+  
+  const handleCourseCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Edit:" + editCourseData);
+    await editCourse({ id: editCourseData?._id, data: courseData });
+  }  
+  
+  // console.log(courseContentData);
   return (
     <div className="w-full flex min-h-screen">
       <div className="w-[80%]">
@@ -140,8 +143,8 @@ const EditCourse:FC<Props> = ({id}) => {
         )}
         {active === 1 && (
           <CourseData
-            benefits={benefits}
-            setBenefits={setBenefits}
+            benifits={benifits}
+            setBenifits={setBenifits}
             prerequisites={prerequisites}
             setPrerequisites={setPrerequisites}
             active={active}

@@ -188,7 +188,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
               },
               "& .MuiDataGrid-cell": {
                 borderBottom: "none",
-                textAlign: "center",
+                // textAlign: "center",
               },
               "& .name-colums--cell": {
                 color: theme === "dark" ? "#fff" : "#000",
@@ -220,6 +220,9 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
               "& .css-1w53k9d-MuiDataGrid-overlay": {
                 backgroundColor: theme === "dark" ? "#1f2a40" : "#f2f0f0",
               },
+              ".css-1e6y48t-MuiButtonBase-root-MuiButton-root": {
+                justifyContent: "flex-start",
+              }
             }}
           >
             <DataGrid rows={rows} columns={columns} checkboxSelection />

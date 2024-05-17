@@ -37,7 +37,7 @@ const CreateCourse = (props: Props) => {
     demoUrl: "",
     thumbnail: "",
   });
-  const [benefits, setBenefits] = useState([{ title: "" }]);
+  const [benifits, setBenifits] = useState([{ title: "" }]);
   const [prerequisites, setPrerequisites] = useState([{ title: "" }]);
   const [courseContentData, setCourseContentData] = useState([
     {
@@ -55,9 +55,10 @@ const CreateCourse = (props: Props) => {
     },
   ]);
   const [courseData, setCourseData] = useState({});
+
   const handleSubmit = async () => {
-    // format benefits array
-    const formattedBenefits = benefits.map((benefit) => ({
+    // format benifits array
+    const formattedBenifits = benifits.map((benefit) => ({
       title: benefit.title,
     }));
     // format prerequisites array
@@ -88,7 +89,7 @@ const CreateCourse = (props: Props) => {
       level: courseInfo.level,
       demoUrl: courseInfo.demoUrl,
       totalVideos: courseContentData.length,
-      benefits: formattedBenefits,
+      benifits: formattedBenifits,
       prerequisites: formattedPrerequisites,
       courseData: formattedCourseContentData,
     };
@@ -99,6 +100,7 @@ const CreateCourse = (props: Props) => {
 
   const handleCourseCreate = async (e:any) => {
     const data = courseData;
+    console.log(data);
     if(!isLoading){
       await createCourse(data);
     }
@@ -117,8 +119,8 @@ const CreateCourse = (props: Props) => {
         )}
         {active === 1 && (
           <CourseData
-            benefits={benefits}
-            setBenefits={setBenefits}
+            benifits={benifits}
+            setBenifits={setBenifits}
             prerequisites={prerequisites}
             setPrerequisites={setPrerequisites}
             active={active}
@@ -140,6 +142,7 @@ const CreateCourse = (props: Props) => {
             setActive={setActive}
             courseData={courseData}
             handleCourseCreate={handleCourseCreate}
+            isEdit={false}
           />
         )}
       </div>

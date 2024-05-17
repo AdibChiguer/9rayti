@@ -104,7 +104,7 @@ const CourseInformation: FC<Props> = ({
               required
               value={courseInfo.price}
               onChange={(e) =>
-                setCourseInfo({ ...courseInfo, price: e.target.value })
+                setCourseInfo({ ...courseInfo, price: parseFloat(e.target.value) })
               }
               className={`${styles.input}`}
               id="price"
@@ -120,10 +120,10 @@ const CourseInformation: FC<Props> = ({
               name=""
               value={courseInfo.estimatedPrice}
               onChange={(e) =>
-                setCourseInfo({ ...courseInfo, estimatedPrice: e.target.value })
+                setCourseInfo({ ...courseInfo, estimatedPrice: parseFloat(e.target.value) })
               }
               className={`${styles.input}`}
-              id="price"
+              id="estimatedPrice"
               placeholder="79"
             />
           </div>

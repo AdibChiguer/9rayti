@@ -2,14 +2,13 @@
 import React from 'react'
 import AdminSidebar from '../../../components/Admin/sidebar/AdminSidebar'
 import Heading from '../../../utils/Heading'
-import CreateCourse from '../../../components/Admin/Course/CreateCourse'
 import DashboardHeader from '../../../../app/components/Admin/DashboardHeader'
 import EditCourse from '../../../components/Admin/Course/EditCourse'
 
 type Props = {}
 
 function page({params}: any) {
-  const id = params?.id();
+  const id = params?.id;
 
   return (
     <div className=''>

@@ -1,11 +1,11 @@
-import toast from "react-hot-toast";
-import { styles } from "../../../styles/style";
 import React, { FC } from "react";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import toast from "react-hot-toast";
+import { styles } from "../../../styles/style";
 
 type Props = {
-  benefits: { title: string }[];
-  setBenefits: (benefits: { title: string }[]) => void;
+  benifits: { title: string }[];
+  setBenifits: (benifits: { title: string }[]) => void;
   prerequisites: { title: string }[];
   setPrerequisites: (prerequisites: { title: string }[]) => void;
   active: number;
@@ -13,69 +13,69 @@ type Props = {
 };
 
 const CourseData: FC<Props> = ({
-  benefits,
-  setBenefits,
+  benifits,
+  setBenifits,
   prerequisites,
   setPrerequisites,
   active,
   setActive,
 }) => {
 
-  const handleBenefitChange = (index: number, value: any) => {
-    const updatedBenefits = [...benefits];
-    updatedBenefits[index].title = value;
-    setBenefits(updatedBenefits);
+  const handleBenifitChange = (index: number, value: string) => {
+    const updatedBenifits = benifits.map((benifit, i) => 
+      i === index ? { ...benifit, title: value } : benifit
+    );
+    setBenifits(updatedBenifits);
   };
 
-  const handleAddBenefit = () => {
-    setBenefits([...benefits, { title: "" }]);
-  }
+  const handleAddBenifit = () => {
+    setBenifits([...benifits, { title: "" }]);
+  };
 
-  const handelPrerequisitesChange = (index: number, value: any) => {
-    const updatePrerequisites = [...prerequisites];
-    updatePrerequisites[index].title = value;
-    setPrerequisites(updatePrerequisites);
+  const handlePrerequisitesChange = (index: number, value: string) => {
+    const updatedPrerequisites = prerequisites.map((prerequisite, i) => 
+      i === index ? { ...prerequisite, title: value } : prerequisite
+    );
+    setPrerequisites(updatedPrerequisites);
   };
 
   const handleAddPrerequisites = () => {
     setPrerequisites([...prerequisites, { title: "" }]);
-  }
+  };
 
   const prevButton = () => {
     setActive(active - 1);
-  }
+  };
 
   const handleOptions = () => {
-    if(benefits[benefits.length - 1]?.title !== "" && prerequisites[prerequisites.length - 1]?.title !== "") {
+    if (benifits[benifits.length - 1]?.title !== "" && prerequisites[prerequisites.length - 1]?.title !== "") {
       setActive(active + 1);
     } else {
       toast.error("Please fill all the fields!");
     }
-  }
+  };
 
   return (
     <div className="w-[80%] m-auto mt-24 block">
       <div className="mb-4">
         <label className={`${styles.label} text-[20px] mb-2`}>
-          What are the benefits of this course?
+          What are the benifits of this course?
         </label>
-        {benefits.map((benefit, index) => (
+        {benifits?.map((benifit, index) => (
           <input
             type="text"
             key={index}
-            name="benefit"
+            name="benifit"
             placeholder="You will learn ..."
             required
             className={`${styles.input} w-[80%]`}
-            value={benefit.title}
-            onChange={(e) => {
-              handleBenefitChange(index, e.target.value);
-            }}
+            value={benifit.title}
+            onChange={(e) => handleBenifitChange(index, e.target.value)}
           />
         ))}
         <AddCircleIcon
           style={{ margin: "10px 0px", cursor: "pointer", width: "30px" }}
-          onClick={handleAddBenefit}
+          onClick={handleAddBenifit}
         />
       </div>
 
@@ -92,9 +92,7 @@ const CourseData: FC<Props> = ({
             required
             className={`${styles.input} w-[80%]`}
             value={prerequisite.title}
-            onChange={(e) => {
-              handelPrerequisitesChange(index, e.target.value);
-            }}
+            onChange={(e) => handlePrerequisitesChange(index, e.target.value)}
           />
         ))}
         <AddCircleIcon
@@ -106,14 +104,14 @@ const CourseData: FC<Props> = ({
       <div className="w-full flex items-center justify-between mb-4">
         <div 
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => prevButton()}
+          onClick={prevButton}
         >
           Prev
         </div>
 
         <div 
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => handleOptions()}
+          onClick={handleOptions}
         >
           Next
         </div>

@@ -8,7 +8,7 @@ type Props = {
   active: number;
   setActive: (active: number) => void;
   courseData: any;
-  handleCourseCreate: any;
+  handleCourseCreate: (e: React.FormEvent) => void;
   isEdit: boolean;
 };
 
@@ -30,8 +30,9 @@ const CoursePreview: FC<Props> = ({
     setActive(active - 1);
   }
 
-  const createCourse = () => {
-    handleCourseCreate();
+  const createCourse = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleCourseCreate(e);
   }
 
   return (
@@ -83,15 +84,13 @@ const CoursePreview: FC<Props> = ({
           </div>
         </div>
 
-        <p className="pb-1">- Sourse code included</p>
+        <p className="pb-1">- Source code included</p>
         <p className="pb-1">- Lifetime access</p>
         <p className="pb-1">- Certificate of completion</p>
         <p className="pb-3 800px:pb-1">- Premium Support</p>
       </div>
 
-
       <div className="w-full mt-4">
-
         <div className="w-full 800px:pr-5">
           <h1 className="text-[25px] font-Poppins font-[600]">
             {courseData?.name}
@@ -108,7 +107,7 @@ const CoursePreview: FC<Props> = ({
         <h1 className="text-[25px] font-Poppins font-[600] mt-4">
           What you will learn in this course?
         </h1>
-        {courseData?.benefits?.map((item: any, index: number) => (
+        {courseData?.benifits?.map((item: any, index: number) => (
           <div className="w-full flex 800px:items-center py-2" key={index}>
             <div className="w-[15px] mr-1">
               <IoCheckmarkCircleSharp size={20} />
@@ -117,12 +116,11 @@ const CoursePreview: FC<Props> = ({
           </div>
         ))}
 
-
         {/* course prerequisites */}
-          <h1 className="text-[25px] font-Poppins font-[600] mt-4">
-            What are the prerequisites for this course?
-          </h1>
-          {courseData?.prerequisites?.map((item: any, index: number) => (
+        <h1 className="text-[25px] font-Poppins font-[600] mt-4">
+          What are the prerequisites for this course?
+        </h1>
+        {courseData?.prerequisites?.map((item: any, index: number) => (
           <div className="w-full flex 800px:items-center py-2" key={index}>
             <div className="w-[15px] mr-1">
               <IoCheckmarkCircleSharp size={20} />
@@ -136,28 +134,24 @@ const CoursePreview: FC<Props> = ({
           <h1 className="text-[25px] font-Poppins font-[600]">
             Course Details
           </h1>
-          <p className='text-[18px] mt-2 whitespace-pre-line w-full overflow-hidden'>
+          <p className="text-[18px] mt-2 whitespace-pre-line w-full overflow-hidden">
             {courseData?.description}
           </p>
         </div>
-
       </div>
-
 
       <div className="w-full flex items-center justify-between pr-4">
         <div
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => preButton()}
+          onClick={preButton}
         >
           Prev
         </div>
         <div
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => createCourse()}
+          onClick={createCourse}
         >
-          {
-            isEdit ? 'Update' : 'Create'
-          }
+          {isEdit ? 'Update' : 'Create'}
         </div>
       </div>
     </div>
