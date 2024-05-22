@@ -5,57 +5,91 @@ import LayoutModel from "../models/layout.model";
 import cloudinary from "cloudinary";
 
 // create Layout
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_SECRET_KEY,
+});
+
 export const createLayout = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { type } = req.body;
-      const isTypeExist = await LayoutModel.findOne({ type });
+      const { type, title, subTitle, image, faq, categories } = req.body;
 
       if (!type) {
         return next(new ErrorHandler(400, "Please enter layout type"));
       }
+
+      const isTypeExist = await LayoutModel.findOne({ type });
 
       if (isTypeExist) {
         return next(new ErrorHandler(400, `${type} already exists`));
       }
 
       if (type === "Banner") {
-        const { title, subTitle, image } = req.body;
-        const myCloud = await cloudinary.v2.uploader.upload(image, {
-          folder: "layout",
+        if (!title || !subTitle || !image) {
+          return next(new ErrorHandler(400, "Missing required fields for Banner"));
+        }
+
+        // Convert base64 string to buffer
+        const buffer = Buffer.from(image, 'base64');
+
+        // Define the result type from Cloudinary
+        interface UploadResult {
+          public_id: string;
+          secure_url: string;
+        }
+
+        // Upload the image to Cloudinary
+        const uploadResult = await new Promise<UploadResult>((resolve, reject) => {
+          const uploadStream = cloudinary.v2.uploader.upload_stream(
+            { folder: "layout" },
+            (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result as UploadResult); // Explicitly typecast result
+              }
+            }
+          );
+          uploadStream.end(buffer);
         });
+
         const banner = {
           type: "Banner",
           banner: {
             image: {
-              public_id: myCloud.public_id,
-              url: myCloud.secure_url,
+              public_id: uploadResult.public_id,
+              url: uploadResult.secure_url,
             },
             title,
             subTitle,
           },
         };
+
         await LayoutModel.create(banner);
+
       } else if (type === "FAQ") {
-        const { faq } = req.body;
-        const faqItems = await Promise.all(
-          faq.map(async (item: any) => {
-            return {
-              question: item.question,
-              answer: item.answer,
-            };
-          })
-        );
+        if (!faq || !Array.isArray(faq)) {
+          return next(new ErrorHandler(400, "FAQ must be an array"));
+        }
+
+        const faqItems = faq.map((item: any) => ({
+          question: item.question,
+          answer: item.answer,
+        }));
+
         await LayoutModel.create({ type: "FAQ", faq: faqItems });
+
       } else if (type === "Categories") {
-        const { categories } = req.body;
-        const categoriesItems = await Promise.all(
-          categories.map(async (item: any) => {
-            return {
-              title: item.title,
-            };
-          })
-        );
+        if (!categories || !Array.isArray(categories)) {
+          return next(new ErrorHandler(400, "Categories must be an array"));
+        }
+
+        const categoriesItems = categories.map((item: any) => ({
+          title: item.title,
+        }));
+
         await LayoutModel.create({
           type: "Categories",
           categories: categoriesItems,
@@ -67,7 +101,8 @@ export const createLayout = CatchAsyncError(
         message: "Layout created successfully",
       });
     } catch (error: any) {
-      next(new ErrorHandler(500, error.message));
+      console.error("Error creating layout:", error); // Log the error
+      next(new ErrorHandler(500, error.message || "Internal Server Error"));
     }
   }
 );

@@ -1,3 +1,4 @@
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FC } from "react";
@@ -6,16 +7,22 @@ import { BiSearch } from "react-icons/bi";
 type Props = {};
 
 const Hero: FC<Props> = (props) => {
+  const { data } = useGetHeroDataQuery("Banner");
+
+
+
   return (
     <div className="w-full relative">
       <div className="lg:w-[80%] w-[90%] mx-auto mt-[50px] text-left md:flex md:flex-col md:items-center">
         <h2 className="dark:text-white text-[#0F172A] text-[30px] w-full lg:text-[50px] font-[600] font-Josefin py-2 lg:leading-[75px] lg:w-[90%] md:w-[95%]">
-          Improve Your Online Learning Experience <br /> With Us For Free.
+          {/* Improve Your Online Learning Experience <br /> With Us For Free. */}
+          {data?.layout?.banner?.title}
         </h2>
         <br />
         <p className="dark:text-[#edfff4] text-[#0F172A] font-Josefin font-[600] text-[18px] lg:w-[66%] md:w-[95%]">
-          We have all kinds of courses for you to learn from & 500k+ Online
-          registered students. Find your desired course and start learning now.
+          {/* We have all kinds of courses for you to learn from & 500k+ Online
+          registered students. Find your desired course and start learning now. */}
+          {data?.layout?.banner?.subTitle}
         </p>
         <br />
         <br />
