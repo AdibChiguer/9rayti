@@ -13,11 +13,11 @@ const Courses = (props: Props) => {
   }, [data]);
 
   return (
-    <div>
+    <div className='my-8 py-8'>
       <div className={`w-[90%] 800px:w-[80%] m-auto`}>
         <h1 className='text-center font-Poppins text-[25px] leading-[35px] sm:text-3xl lg:text-4xl dark:text-white 800px:!leading-[60px] text-[#0F172A] tracking-tight '>
           Expan Your Career {" "}
-          <span className='text-gradient'>Opportunity</span> <br />
+          <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 inline-block text-transparent bg-clip-text font-bold'>Opportunity</span> <br />
           Opportunity With Our Courses
         </h1>
         <br />
@@ -26,14 +26,6 @@ const Courses = (props: Props) => {
           {
             courses && courses.map((course: any, index: number) => (
               <>
-                <CourseCard 
-                  item={course}
-                  key={index}
-                />
-                <CourseCard 
-                  item={course}
-                  key={index}
-                />
                 <CourseCard 
                   item={course}
                   key={index}

@@ -38,7 +38,6 @@ const Hero: FC<Props> = (props) => {
           </div>
         </div>
         <br />
-        <br />
         <div className="w-[90%] flex items-center lg:w-[55%] md:w-[95%] gap-[20px]">
           <div className="flex items-center">
             <Image

@@ -30,6 +30,8 @@ const CourseContentList: FC<Props> = (props) => {
     setVisibleSections(newVisibleSections);
   };
 
+  console.log("props", props.data);
+
   return (
     <div
       className={`mt-[15px] w-full ${
@@ -100,7 +102,7 @@ const CourseContentList: FC<Props> = (props) => {
                         props.isDemo ? null : props?.setActiveVideo(videoIndex)
                       }
                     >
-                      <div className="flex items-start">
+                      <div className="flex items-center">
                         <div>
                           <MdOutlineOndemandVideo
                             size={20}

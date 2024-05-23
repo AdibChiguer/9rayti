@@ -18,7 +18,8 @@ const CourseCard:FC<Props> = ({item , isProfile}) => {
         <h1 className='font-Poppins text-[16px] text-[#0F172A] dark:text-white'>
           {item.name}
         </h1>
-        <div className='w-full flex items-center justify-between pt-2'>
+
+        <div className='w-full flex items-center justify-between pt-2 md:flex-col md:items-start md:gap-2'>
           <Ratings rating={item.ratings}/>
           <h5 className={`text-[#0F172A] dark:text-[#fff] ${ isProfile && "hidden 800px:inline" }`}>
             {item.purchased} Students

@@ -21,14 +21,15 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
   }, [videoUrl]);
 
   return (
-    <div >
+    <div className="!w-full" style={{position: "relative" , paddingTop: "56.25%" , overflow :"hidden"}}>
       {url !== "" && (
 
         <video 
           src={`${url}`}
-          className="border-0 h-100% max-w-[90%]"
+          // className="border-0 h-100% max-w-[100%]"
+          style={{position: "absolute" , top: "0" , left: "0" , width: "100%" , height: "100%" , border: "0"}}
           controls
-          autoPlay
+          autoPlay={false}
         >
         </video>
       )}

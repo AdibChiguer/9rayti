@@ -2,32 +2,62 @@ import { styles } from "@/app/styles/style";
 import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
-import React from "react";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import React, { useEffect, useState } from "react";
+import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
 import CourseContentList from "../Course/CourseContentList"
+import { Box, Button, Modal } from "@mui/material";
+import { useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Props = {
   data: any;
 };
 
 const CourseDetails = ({ data }: Props) => {
-  const { user } = useSelector((state: any) => state.auth);
-  const discountPercenatge =
-    ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
+  const { data: userData } = useLoadUserQuery(undefined, {});
+  const user = userData?.user;
+  const [open , setOpen] = useState(false)
+  const [message, setMessage] = useState<any>("");
+  const [createOrder , {data: orderData , error}] = useCreateOrderMutation();
+  const [loadUser , setLoadUser] = useState(false)
+  const {} = useLoadUserQuery({skip: loadUser ? false : true})
+  const [isLoading , setIsLoading] = useState(false)
+
+  const discountPercenatge = ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
   const discountPercentagePrice = discountPercenatge.toFixed(0);
+  const isPurchased = user && user?.courses.find((item: any) => item._id === data?.id);
 
-  const isPurchased =
-    user && user?.courses.find((item: any) => item._id === data?.id);
+  const handleOrder = (e: any) => {
+    setOpen(true);
+  };
 
-  const handleOrder = (e: any) => {};
+  const handleEnroleCourse = async (e:any) => {
+    e.preventDefault();
+    createOrder({courseId: data._id})
+  }
+
+  useEffect(() => {
+    if(orderData) {
+      setLoadUser(true);
+      redirect(`/course-access/${data._id}`)
+    }
+    if(error) {
+      if ("data" in error) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+  }, [orderData , error]);
 
   return (
     <div>
       <div className="w-[90%] 800px:w-[90%] m-auto py-5">
         <div className="w-full flex flex-col-reverse 800px:flex-row">
-          <div className="w-full 800px:w-[65%] 800px:pr-5">
+          <div className="w-full 800px:w-[65%] 800px:pr-20">
             <h1 className="text-[25px] font-Poppins font-[600] text-[#0F172A] dark:text-white">
               {data.name}
             </h1>
@@ -37,7 +67,7 @@ const CourseDetails = ({ data }: Props) => {
                 {data.reviews?.length} Reviews
               </h5>
             </div>
-            <h5 className="text-[#0F172A] dark:text-white">
+            <h5 className="text-[#0F172A] dark:text-white mt-3">
               {data.purchased} Students
             </h5>
 
@@ -157,8 +187,9 @@ const CourseDetails = ({ data }: Props) => {
                 ))}
             </div>
           </div>
+
           <div className="w-full 800px:w-[35%] relative">
-            <div className="sticky top-[100px] left-0 z-50 w-full">
+            <div className="sticky top-[100px] left-0 z-50 !w-full">
               <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
               <div className="flex items-center">
                 <h1 className="pt-5 text-[25px] text-[#0F172A] dark:text-white">
@@ -193,6 +224,40 @@ const CourseDetails = ({ data }: Props) => {
           </div>
         </div>
       </div>
+      <>
+        {
+          open && (
+            <Modal
+              open={open}
+              onClose={() => setOpen(!open)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-10 rounded-md dark:bg-[#0F172A]"
+              >
+                <h1 className={`${styles.title}`}>
+                  Are you sure you want to delete this course?
+                </h1>
+                <div className="w-full flex gap-4">
+                  <Button
+                    onClick={() => setOpen(!open)}
+                    className={`${styles.button} !w-[100px] !h-[35px] !bg-[#57c7a3] !text-white`}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleEnroleCourse}
+                    className={`${styles.button} !w-[100px] !h-[35px] !bg-[#f44336] !text-white`}
+                  >
+                    Enrole
+                  </Button>
+                </div>
+              </Box>
+            </Modal>
+          )
+        }
+      </>
     </div>
   );
 };

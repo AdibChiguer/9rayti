@@ -25,7 +25,8 @@ const config: Config = {
         "1500px": "1500px",
         "800px": "800px",
         "400px": "400px",
-        'md': {'max': '800px'},
+        'md': {'max': '850px'},
+        'ss': {'max': '500px'},
       }
     },
   },

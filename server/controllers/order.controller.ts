@@ -9,6 +9,7 @@ import ejs, { name } from "ejs";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
+import { redis } from "../utils/redis";
 
 
 // Create Order
@@ -55,6 +56,9 @@ export const createOrder = CatchAsyncError(async (req: Request , res: Response ,
       return next(new ErrorHandler(500 , error.message));
     }
     user?.courses.push(course?._id);
+
+    await redis.set(req.user?._id , JSON.stringify(user));
+
     await user?.save();
 
     await NotificationModel.create({
@@ -83,3 +87,5 @@ export const getAllOrders = CatchAsyncError(async (req: Request , res: Response 
     return next(new ErrorHandler(500 , error.message));
   }
 });
+
+// 

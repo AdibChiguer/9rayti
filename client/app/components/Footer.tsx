@@ -9,7 +9,7 @@ const Footer = (props: Props) => {
       <div className='border border-[#000000e] dark:border-[#ffffff1e]' />
       <br />
       <div className='w-[95%] 800px:w-full 800px:max-w-[85%] mx-auto px-2 sm:px-6 lg:px-8'>
-        <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-8 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 ss:grid-cols-1 ss:text-center'>
           <div className='space-y-3'>
             <h3 className='text-[20px] font-[600] text-[#0F172A] dark:text-white'>About</h3>
             <ul className='space-y-4'>
@@ -72,6 +72,7 @@ const Footer = (props: Props) => {
               </li>
             </ul>
           </div>
+          
           <div>
             <h3 className='text-[20px] font-[600] text-[#0F172A] dark:text-white pb-3'>Contact Info</h3>
             <p className='text-base text-[#0F172A] dark:text-gray-300 dark:hover:text-white pb-2'>

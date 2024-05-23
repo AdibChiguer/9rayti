@@ -58,7 +58,7 @@ const reviewSchema: Schema = new mongoose.Schema({
   },
   comment: String,
   commentReplies: [Object]
-});
+}, {timestamps: true});
 
 const linksSchema: Schema = new mongoose.Schema({
   title: String,
@@ -69,7 +69,7 @@ const commentSchema: Schema = new mongoose.Schema({
   user: Object,
   question: String,
   questionRpelies: [Object]
-});
+}, {timestamps: true});
 
 const courseDataSchema: Schema = new mongoose.Schema({
   title: String,
@@ -81,7 +81,7 @@ const courseDataSchema: Schema = new mongoose.Schema({
   links: [linksSchema],
   suggestion: String,
   questions: [commentSchema]
-});
+}, {timestamps: true});
 
 const courseSchema: Schema = new mongoose.Schema({
   name: {
