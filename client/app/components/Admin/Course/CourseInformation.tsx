@@ -71,6 +71,8 @@ const CourseInformation: FC<Props> = ({
     }
   };
 
+  console.log(courseInfo);
+
   return (
     <div className="w-[80%] m-auto mt-24">
       <form onSubmit={handleSubmit} className={`${styles.label}`}>
@@ -161,8 +163,8 @@ const CourseInformation: FC<Props> = ({
             <label className={`${styles.label} w-[50%]`}>Course Categories</label>
             <select 
               className={styles.input}
-              value={courseInfo.category}
-              onChange={(e:any) => setCourseInfo({...courseInfo , category: e.target.value})}
+              value={courseInfo.categories}
+              onChange={(e:any) => setCourseInfo({...courseInfo , categories: e.target.value})}
             >
               <option value="">Select Category</option>
               {

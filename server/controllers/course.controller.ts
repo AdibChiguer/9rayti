@@ -16,7 +16,11 @@ export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req.body;
-      const thumbnail = data.thumbnail;
+      
+      const { thumbnail, ...dataWithoutThumbnail } = data;
+      console.log("bodyyyyy", dataWithoutThumbnail);
+
+      // const thumbnail = data.thumbnail;
       if (thumbnail) {
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "course",
@@ -214,7 +218,7 @@ export const addQuestion = CatchAsyncError(
       content.questions.push(newQuestion);
 
       await NotificationModel.create({
-        user: req.user?._id,
+        userId: req.user?._id,
         title: "New Question Received",
         message: `You have a new question for the course title: ${content.title}`,
       });
@@ -243,9 +247,7 @@ interface IAddAnswerData {
 export const addAnswer = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { answer, courseId, contentId, questionId }: IAddAnswerData =
-        req.body;
-
+      const { answer, courseId, contentId, questionId }: IAddAnswerData = req.body;
       const course = await CourseModel.findById(courseId);
 
       if (
@@ -279,22 +281,23 @@ export const addAnswer = CatchAsyncError(
       const newAnswer: any = {
         user: req.user,
         answer,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
-
       // add this answer in question
       question.questionReplies?.push(newAnswer);
 
       // save the course
       await course?.save();
 
-      if (!question.user._id.equals(req.user?._id)) {
+      if (question.user && question.user._id && question.user._id === req.user?._id) {
         // create a notification for the admin
         await NotificationModel.create({
-          user: req.user?._id,
+          userId: req.user?._id,
           title: "New Question Reply Received",
           message: `You have a new question reply for the course title: ${content.title}`,
         });
-      } else {
+      } else if (question.user && question.user._id) {
         const data = {
           name: question.user.name,
           title: content.title,
@@ -374,12 +377,14 @@ export const addReview = CatchAsyncError(
 
       await course?.save();
 
-      const notification = {
-        title: "New Review Received",
-        message: `${req.user?.name} has given a review in ${course?.name}`,
-      };
+      await redis.set(courseId, JSON.stringify(course), "EX" , 604800);
 
       // create notification for the admin
+      await NotificationModel.create({
+        userId: req.user?._id,
+        title: "New Review Received",
+        message: `${req.user?.name} has given a review in ${course?.name}`,
+      });
 
       res.status(200).json({
         success: true,
@@ -417,12 +422,18 @@ export const addReplyToReview = CatchAsyncError(
       const replyData: any = {
         user: req.user,
         comment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       
       if(!review.commentReplies) review.commentReplies = [];
 
       review.commentReplies?.push(replyData);
+
       await course?.save();
+      
+      await redis.set(courseId, JSON.stringify(course), "EX" , 604800);
+
       res.status(200).json({
         success: true,
         course,
@@ -487,8 +498,6 @@ export const generateVideoUrl = CatchAsyncError(async(req: Request, res: Respons
     const fileId = getDriveFileId(videoId);
     
     const videoUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${process.env.GOOGLE_DRIVE_API_KEY}&v=.mp4`;
-
-    console.log("v:" + videoUrl);
     
     res.status(200).json({
       success: true,

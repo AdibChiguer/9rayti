@@ -30,12 +30,10 @@ const CourseContentList: FC<Props> = (props) => {
     setVisibleSections(newVisibleSections);
   };
 
-  console.log("props", props.data);
-
   return (
     <div
       className={`mt-[15px] w-full ${
-        !props.isDemo && "ml-[30px] sticky top-24 left-0 z-30"
+        !props.isDemo && " sticky top-24 left-0 z-30"
       }`}
     >
       {videoSections.map((section: string, index: number) => {
@@ -57,7 +55,7 @@ const CourseContentList: FC<Props> = (props) => {
 
         return (
           <div
-            className={`${!props.isDemo && "border-b border-[#ffffff8e] pb-2"}`}
+            className={`${!props.isDemo && "border-b dark:border-[#ffffff8e] border-[#0F172A] pb-2 mr-4"}`}
             key={section}
           >
             <div className="w-full flex">

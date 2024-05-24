@@ -47,7 +47,7 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
     if(data === null && isSuccess){
       toast.success("Logged in successfully");
     }
-    if(data === null){
+    if(data === null && error){
       setLogout(true);
     }
 

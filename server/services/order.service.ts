@@ -4,8 +4,9 @@ import OrderModel from "../models/order.model";
 import ErrorHandler from "../utils/ErrorHandler";
 
 // create new order
-export const newOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-  const order = await OrderModel.create(req.body);
+export const newOrder = CatchAsyncError(async (data: any, res: Response, next: NextFunction) => {
+  console.log("req.body:" + JSON.stringify(data));
+  const order = await OrderModel.create(data);
 
   res.status(201).json({
     success: true,

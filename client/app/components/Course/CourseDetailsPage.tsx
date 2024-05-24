@@ -15,6 +15,7 @@ const CourseDetailsPage = ({ id }: Props) => {
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetCourseDetailsQuery(id);
   
+  console.log("data in detailspage : " + {data});
 
   return (
     <>

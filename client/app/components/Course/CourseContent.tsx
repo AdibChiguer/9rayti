@@ -2,7 +2,7 @@ import { useGetCourseContentQuery } from "@/redux/features/courses/coursesApi";
 import React, { useState } from "react";
 import Loader from "../Loader/Loader";
 import Heading from "@/app/utils/Heading";
-import CourseCoententMedia from "./CourseCoententMedia";
+import CourseContentMedia from "./CourseContentMedia";
 import Header from "../Header";
 import CourseContentList from "./CourseContentList";
 
@@ -29,13 +29,13 @@ const CourseContent = ({ id, user }: Props) => {
         <Loader />
       ) : (
         <>
-          {/* <Header 
+          <Header 
             activeItem={1}
             open={open}
             setOpen={setOpen}
             route={route}
             setRoute={setRoute}
-          /> */}
+          />
           <div className="w-full grid 800px:grid-cols-10">
             <Heading
               title={data[activeVideo]?.title}
@@ -43,7 +43,7 @@ const CourseContent = ({ id, user }: Props) => {
               keywords={data[activeVideo]?.tags}
             />
             <div className="col-span-7">
-              <CourseCoententMedia
+              <CourseContentMedia
                 data={data}
                 id={id}
                 activeVideo={activeVideo}

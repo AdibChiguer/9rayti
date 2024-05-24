@@ -8,10 +8,8 @@ import { useCreateCourseMutation } from "@/redux/features/courses/coursesApi";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 
-type Props = {};
-
-const CreateCourse = (props: Props) => {
-  const [createCourse, {isLoading, isSuccess, error}] = useCreateCourseMutation();
+const CreateCourse = () => {
+  const [createCourse, { isLoading, isSuccess, error }] = useCreateCourseMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -20,8 +18,9 @@ const CreateCourse = (props: Props) => {
     }
     if (error) {
       if ("data" in error) {
-        const errorMessage = error as any;
+        const errorMessage = (error as any).data?.message || "An error occurred";
         toast.error(errorMessage);
+        console.log(error);
       }
     }
   }, [isSuccess, error, isLoading]);
@@ -30,13 +29,13 @@ const CreateCourse = (props: Props) => {
   const [courseInfo, setCourseInfo] = useState({
     name: "",
     description: "",
+    categories: "",
     price: "",
     estimatedPrice: "",
+    thumbnail: "",
     tags: "",
     level: "",
-    categories: "",
     demoUrl: "",
-    thumbnail: "",
   });
   const [benifits, setBenifits] = useState([{ title: "" }]);
   const [prerequisites, setPrerequisites] = useState([{ title: "" }]);
@@ -58,56 +57,35 @@ const CreateCourse = (props: Props) => {
   ]);
   const [courseData, setCourseData] = useState({});
 
-  const handleSubmit = async () => {
-    // format benifits array
-    const formattedBenifits = benifits.map((benefit) => ({
-      title: benefit.title,
-    }));
-    // format prerequisites array
-    const formattedPrerequisites = prerequisites.map((prerequisite) => ({
-      title: prerequisite.title,
-    }));
-    // format course content array
+  const handleSubmit = () => {
+    const formattedBenifits = benifits.map((benefit) => ({ title: benefit.title }));
+    const formattedPrerequisites = prerequisites.map((prerequisite) => ({ title: prerequisite.title }));
     const formattedCourseContentData = courseContentData.map((content) => ({
       videoUrl: content.videoUrl,
       title: content.title,
       description: content.description,
       videoLength: content.videoLength,
       videoSection: content.videoSection,
-      links: content.links.map((link) => ({
-        title: link.title,
-        url: link.url,
-      })),
+      links: content.links.map((link) => ({ title: link.title, url: link.url })),
       suggestions: content.suggestions,
     }));
 
-    // prepare our data object
     const data = {
-      name: courseInfo.name,
-      description: courseInfo.description,
-      price: courseInfo.price,
-      estimatedPrice: courseInfo.estimatedPrice,
-      tags: courseInfo.tags,
-      thumbnail: courseInfo.thumbnail,
-      level: courseInfo.level,
-      demoUrl: courseInfo.demoUrl,
-      totalVideos: courseContentData.length,
+      ...courseInfo,
       benifits: formattedBenifits,
       prerequisites: formattedPrerequisites,
+      totalVideos: courseContentData.length,
       courseData: formattedCourseContentData,
     };
 
-    // send data to the server
     setCourseData(data);
   };
 
-  const handleCourseCreate = async (e:any) => {
-    const data = courseData;
-    console.log(data);
-    if(!isLoading){
-      await createCourse(data);
+  const handleCourseCreate = async () => {
+    if (!isLoading) {
+      await createCourse(courseData);
     }
-  }
+  };
 
   return (
     <div className="w-full flex min-h-screen">

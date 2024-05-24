@@ -149,6 +149,8 @@ export const loginUser = CatchAsyncError(
         return next(new ErrorHandler(401, "Invalid email or password"));
       }
 
+      await redis.set(user._id, JSON.stringify(user) , "EX" , 604800 );
+
       sendToken(user, 200, res);
     } catch (error: any) {
       return next(new ErrorHandler(400, error.message));
@@ -186,13 +188,20 @@ export const updateAccessToken = CatchAsyncError(
       }
 
       const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN as Secret) as JwtPayload;
-      if (!decoded) {
-        return next(new ErrorHandler(400, "Please login to access this resource"));
+      if (!decoded || !decoded.id) {
+        return next(new ErrorHandler(400, "Invalid token. Please login to access this resource"));
       }
 
       const session = await redis.get(decoded.id);
+
+      console.log({
+        "session": session,
+        "decoded.id": decoded.id,
+        "refreshToken": refreshToken,
+      });
+
       if (!session) {
-        return next(new ErrorHandler(400, "Please login to access this resource"));
+        return next(new ErrorHandler(400, "Session expired or invalid. Please login again."));
       }
 
       const user = JSON.parse(session);
@@ -204,16 +213,17 @@ export const updateAccessToken = CatchAsyncError(
         expiresIn: "3d" 
       });
 
-      req.user =  user;
+      req.user = user;
 
       res.cookie("access_token", access_token, accessTokenOptions);
       res.cookie("refresh_token", refresh_token, refreshTokenOptions);
 
-      await redis.set(user._id, JSON.stringify(user) , "EX" , 604800 );
+      await redis.set(user._id, JSON.stringify(user), "EX", 604800);
 
       next();
     } catch (error: any) {
-      return next(new ErrorHandler(400, error.message));
+      console.error("Error in updateAccessToken:", error);
+      return next(new ErrorHandler(400, "An error occurred while updating the access token."));
     }
   }
 );

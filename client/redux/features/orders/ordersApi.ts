@@ -11,7 +11,7 @@ export const ordersApi = apiSlice.injectEndpoints({
     }),
     createOrder: builder.mutation({
       query: ({courseId}) => ({
-        url: `create-order`,
+        url: "create-order",
         method: "POST",
         body: { courseId },
         credentials: "include" as const,

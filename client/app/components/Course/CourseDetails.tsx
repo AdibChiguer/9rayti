@@ -12,6 +12,8 @@ import { useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
+import Image from "next/image";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 type Props = {
   data: any;
@@ -21,15 +23,15 @@ const CourseDetails = ({ data }: Props) => {
   const { data: userData } = useLoadUserQuery(undefined, {});
   const user = userData?.user;
   const [open , setOpen] = useState(false)
-  const [message, setMessage] = useState<any>("");
+  // const [message, setMessage] = useState<any>("");
   const [createOrder , {data: orderData , error}] = useCreateOrderMutation();
   const [loadUser , setLoadUser] = useState(false)
   const {} = useLoadUserQuery({skip: loadUser ? false : true})
-  const [isLoading , setIsLoading] = useState(false)
+  // const [isLoading , setIsLoading] = useState(false)
 
   const discountPercenatge = ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
   const discountPercentagePrice = discountPercenatge.toFixed(0);
-  const isPurchased = user && user?.courses.find((item: any) => item._id === data?.id);
+  const isPurchased = user && user?.courses.find((item: any) => item._id === data?._id);
 
   const handleOrder = (e: any) => {
     setOpen(true);
@@ -49,6 +51,7 @@ const CourseDetails = ({ data }: Props) => {
       if ("data" in error) {
         const errorMessage = error as any;
         toast.error(errorMessage.data.message);
+        console.log(errorMessage);
       }
     }
   }, [orderData , error]);
@@ -62,7 +65,7 @@ const CourseDetails = ({ data }: Props) => {
               {data.name}
             </h1>
             <div className="flex items-center justify-between pt-3">
-              <Ratings rating={data.rating} />
+              <Ratings rating={data.ratings} />
               <h5 className="text-[#0F172A] dark:text-white">
                 {data.reviews?.length} Reviews
               </h5>
@@ -76,7 +79,7 @@ const CourseDetails = ({ data }: Props) => {
               What you will learn from this course
             </h1>
             <div>
-              {data.benefits?.map((item: any, index: number) => (
+              {data.benifits?.map((item: any, index: number) => (
                 <div
                   className="w-full flex 800px:items-center py-2"
                   key={index}
@@ -132,7 +135,7 @@ const CourseDetails = ({ data }: Props) => {
               <h1 className="text-[25px] font-Poppins font-[600] text-[#0F172A] dark:text-white">
                 Course Details
               </h1>
-              <p className="text-[18px] mt-[20px] whitespace-pre-line w-full overflow-hidden text-[#0F172A] dark:text-white">
+              <p className="text-[18px] mt-[15px] whitespace-pre-line w-full overflow-hidden text-[#0F172A] dark:text-white">
                 {data.description}
               </p>
             </div>
@@ -155,12 +158,14 @@ const CourseDetails = ({ data }: Props) => {
                 [...data?.reviews].reverse().map((item: any, index: number) => (
                   <div className="w-full pb-4" key={index}>
                     <div className="flex">
-                      <div className="w-[50%] h-[50%]">
-                        <div className="w-[50%] h-[50%] bg-slate-600 rounded-[50] flex items-center justify-center cursor-pointer">
-                          <h1 className="uppercase text-[18px] text-[#0F172A] dark:text-white">
-                            {item.user.name.slice(0, 2)}
-                          </h1>
-                        </div>
+                      <div className="mr-2 h-[50%]">
+                        <Image 
+                          src={item?.user.avatar ? item?.user.avatar : require("../../../public/assets/avatar.jpg")}
+                          width={50}
+                          height={50}
+                          alt='avatar'
+                          className='w-[50px] h-[50px] object-cover rounded-full'
+                        />
                       </div>
                       <div className="hidden 800px:block pl-2">
                         <div className="flex items-center">
@@ -183,6 +188,35 @@ const CourseDetails = ({ data }: Props) => {
                         <Ratings rating={item.rating} />
                       </div>
                     </div>
+                    {
+                      item.commentReplies.map((i:any , index:number) => (
+                        <div className="w-full flex 800px:ml-16 my-5" key={index}>
+                          <div className="mr-2 h-[50%]">
+                            <Image 
+                              src={i?.user.avatar ? i?.user.avatar : require("../../../public/assets/avatar.jpg")}
+                              width={50}
+                              height={50}
+                              alt='avatar'
+                              className='w-[50px] h-[50px] object-cover rounded-full'
+                            />
+                          </div>
+                          <div className="pl-2">
+                            <div className="flex items-center">
+                              <h5 className="flex items-center">
+                                {i.user.name}{" "}
+                              </h5>
+                              <VscVerifiedFilled className="text-[#0095f6] ml-2 text-[20px]" />
+                            </div>
+                            <p>
+                              {i.comment}
+                            </p>
+                            <small className="dark:text-[#edfff4] text-[#0F172A]">
+                              {format(i.createdAt)}
+                            </small>
+                          </div>
+                        </div>
+                      ))
+                    }
                   </div>
                 ))}
             </div>

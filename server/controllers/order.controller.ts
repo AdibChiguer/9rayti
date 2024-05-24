@@ -10,73 +10,96 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import { redis } from "../utils/redis";
+import CourseModel from "../models/course.model";
 
 
 // Create Order
-export const createOrder = CatchAsyncError(async (req: Request , res: Response , next: NextFunction) => {
+export const createOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {courseId , paymentInfo} = req.body;
-    const user = await userModel.findById(req.user?.id);
-    const courseExists = user?.courses.some((course) => course.toString() === courseId);
-    if(courseExists) {
-      return next(new ErrorHandler(400 , "You have already purchased this course"));
+    const { courseId } = req.body;
+
+    if (!req.user) {
+      return next(new ErrorHandler(400, "User not authenticated"));
+    }
+
+    const user = await userModel.findById(req.user._id);
+
+    if (!user) {
+      return next(new ErrorHandler(404, "User not found"));
+    }
+
+    const courseExists = user.courses.some((course) => course.toString() === courseId);
+
+    if (courseExists) {
+      return next(new ErrorHandler(400, "You have already purchased this course"));
     }
 
     const course = await courseModel.findById(courseId);
-    if(!course) {
-      return next(new ErrorHandler(404 , "Course not found"));
+
+    if (!course) {
+      return next(new ErrorHandler(404, "Course not found"));
     }
 
-    const data:any = {
-      courseId: course?._id,
-      userId: user?._id,
-    }
+    const data: any = {
+      courseId: course._id,
+      userId: user._id,
+    };
+
+    console.log("order data:" + JSON.stringify(data));
 
     const mailData = {
       order: {
-        _id: course?._id.toString().slice(0 , 6),
-        name: course?.name,
-        price: course?.price,
-        date : new Date().toLocaleString("en-US" , {year: "numeric" , month: "long" , day: "numeric"}),
+        _id: course._id.toString().slice(0, 6),
+        name: course.name,
+        price: course.price,
+        date: new Date().toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric" }),
       },
-    }
+    };
 
-    const html = await ejs.renderFile(path.join(__dirname , "../mails/order-confirmation.ejs") , {order: mailData});
+    const html = await ejs.renderFile(path.join(__dirname, "../mails/order-confirmation.ejs"), { order: mailData });
 
     try {
-      if(user){
-        await sendMail({
-          email: user.email,
-          subject: "Order Confirmation",
-          template: "order-confirmation.ejs",
-          data: mailData,
-        });
-      }
-    } catch (error:any) {
-      return next(new ErrorHandler(500 , error.message));
+      await sendMail({
+        email: user.email,
+        subject: "Order Confirmation",
+        template: "order-confirmation.ejs",
+        data: mailData,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(500, error.message));
     }
-    user?.courses.push(course?._id);
 
-    await redis.set(req.user?._id , JSON.stringify(user));
+    user.courses.push(course._id);
+    
+    await redis.set(req.user._id, JSON.stringify(user));
 
-    await user?.save();
+    const courses = await CourseModel.find().select(
+      "-courseData.videoUrl -courseData.suggestion -courseDate.question -courserData.links"
+    );
+    await redis.set("allCourses", JSON.stringify(courses));
+
+    await user.save();
 
     await NotificationModel.create({
-      user: user?._id,
+      userId: user._id,
       title: "New Order",
-      message: `You have a new order for the course ${course?.name}`,
+      message: `You have a new order for the course ${course.name}`,
     });
 
-    course.purchased ? course.purchased += 1 : course.purchased;
+    if (!course.purchased) {
+      course.purchased = 1;
+    } else {
+      course.purchased += 1;
+    }
 
     await course.save();
 
-    newOrder(data , res , next);
-
-  } catch (error:any) {
-    return next(new ErrorHandler(500 , error.message));
+    newOrder(data, res, next);
+  } catch (error: any) {
+    return next(new ErrorHandler(500, error.message));
   }
 });
+
 
 
 // get all orders -- only for admin

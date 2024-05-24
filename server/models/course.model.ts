@@ -68,7 +68,7 @@ const linksSchema: Schema = new mongoose.Schema({
 const commentSchema: Schema = new mongoose.Schema({
   user: Object,
   question: String,
-  questionRpelies: [Object]
+  questionReplies: [Object]
 }, {timestamps: true});
 
 const courseDataSchema: Schema = new mongoose.Schema({
