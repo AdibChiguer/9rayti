@@ -14,8 +14,6 @@ const CourseDetailsPage = ({ id }: Props) => {
   const [route, setRoute] = useState("Login");
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetCourseDetailsQuery(id);
-  
-  console.log("data in detailspage : " + {data});
 
   return (
     <>
@@ -37,7 +35,11 @@ const CourseDetailsPage = ({ id }: Props) => {
             setRoute={setRoute}
             activeItem={1}
           />
-          <CourseDetails data={data?.course} />
+          <CourseDetails 
+            data={data?.course} 
+            setOpen={setOpen}
+            setRoute={setRoute}
+          />
           <Footer />
         </div>
       )}

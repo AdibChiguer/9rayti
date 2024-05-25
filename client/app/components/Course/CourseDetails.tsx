@@ -3,8 +3,7 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { IoCheckmarkDoneOutline} from "react-icons/io5";
 import { format } from "timeago.js";
 import CourseContentList from "../Course/CourseContentList"
 import { Box, Button, Modal } from "@mui/material";
@@ -14,14 +13,19 @@ import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { VscVerifiedFilled } from "react-icons/vsc";
+import socketIO from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT , {transports: ["websocket"]});
 
 type Props = {
   data: any;
+  setRoute: any;
+  setOpen: any;
 };
 
-const CourseDetails = ({ data }: Props) => {
+const CourseDetails = ({ data , setOpen: openAuthModel , setRoute }: Props) => {
   const { data: userData } = useLoadUserQuery(undefined, {});
-  const user = userData?.user;
+  const [user , setUser] = useState<any>();
   const [open , setOpen] = useState(false)
   // const [message, setMessage] = useState<any>("");
   const [createOrder , {data: orderData , error}] = useCreateOrderMutation();
@@ -34,7 +38,12 @@ const CourseDetails = ({ data }: Props) => {
   const isPurchased = user && user?.courses.find((item: any) => item._id === data?._id);
 
   const handleOrder = (e: any) => {
-    setOpen(true);
+    if(user) {
+      setOpen(true);
+    } else {
+      setRoute("Login");
+      openAuthModel(true);
+    }
   };
 
   const handleEnroleCourse = async (e:any) => {
@@ -43,8 +52,17 @@ const CourseDetails = ({ data }: Props) => {
   }
 
   useEffect(() => {
+    setUser(userData?.user);
+  } , [userData])
+
+  useEffect(() => {
     if(orderData) {
       setLoadUser(true);
+      socketId.emit("notification" , {
+        title: "New Order",
+        message: `You have a new order for ${data.name} course`,
+        userId: user._id
+      });
       redirect(`/course-access/${data._id}`)
     }
     if(error) {

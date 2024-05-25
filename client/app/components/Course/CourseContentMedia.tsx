@@ -9,6 +9,9 @@ import { AiFillStar, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineStar } fr
 import { BiMessage } from 'react-icons/bi'
 import { VscVerifiedFilled } from 'react-icons/vsc'
 import { format } from 'timeago.js'
+import socketIO from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT , {transports: ["websocket"]});
 
 type Props = {
   data: any
@@ -74,17 +77,34 @@ const CourseContentMedia = ({ data , id , activeVideo , setActiveVideo , user , 
       toast.success('Question added successfully')
       refetch()
       setQuestion('')
+      socketId.emit("notification" , {
+        title: "New Question Received",
+        message: `You have a new question in ${data[activeVideo].title}`,
+        userId: user._id
+      });
     } 
     if(answerSuccess) {
       toast.success('Answer added successfully')
       refetch()
       setAnswer('')
+      if(user.role !== "admin") {
+        socketId.emit("notification" , {
+          title: "New Reply Received",
+          message: `You have a new Reply in ${data[activeVideo].title}`,
+          userId: user._id
+        });
+      }
     }
     if(reviewSuccess) {
       toast.success('Review added successfully')
       courseRefetch()
       setReview('')
       setRating(0)
+      socketId.emit("notification" , {
+        title: "New Review Received",
+        message: `${user.name} has given a review in ${data[activeVideo].title}`,
+        userId: user._id
+      });
     }
     if(replySuccess) {
       toast.success('Reply added successfully')
@@ -233,6 +253,7 @@ const CourseContentMedia = ({ data , id , activeVideo , setActiveVideo , user , 
                   setAnswer={setAnswer}
                   handleAnswerSubmit={handleAnswerSubmit}
                   user={user}
+                  questionId={questionId}
                   setQuestionId={setQuestionId}
                   answerCreationLoading={answerCreationLoading}
                 />
@@ -332,7 +353,7 @@ const CourseContentMedia = ({ data , id , activeVideo , setActiveVideo , user , 
                         </div>
                       </div>
                       {
-                        user.role === "admin" && (
+                        user.role === "admin" && item.commentReplies.length === 0 && (
                           <span 
                             className={`${styles.label} !ml-10 cursor-pointer`}
                             onClick={() => {
@@ -345,7 +366,7 @@ const CourseContentMedia = ({ data , id , activeVideo , setActiveVideo , user , 
                         )
                       }
                       {
-                        isReviewReply && (
+                        isReviewReply && reviewId === item._id && (
                           <div className='w-full flex relative'>
                             <input 
                               type="text"
@@ -414,6 +435,7 @@ const CommentReply = ({
   handleAnswerSubmit,
   setQuestionId,
   answerCreationLoading,
+  questionId,
 }:any) => {
   return (
     <>
@@ -428,6 +450,7 @@ const CommentReply = ({
               index={index}
               answer={answer}
               setAnswer={setAnswer}
+              questionId={questionId}
               setQuestionId={setQuestionId}
               handleAnswerSubmit={handleAnswerSubmit}
               answerCreationLoading={answerCreationLoading}
@@ -446,6 +469,7 @@ const CommentItem = ({
   handleAnswerSubmit,
   setQuestionId,
   answerCreationLoading,
+  questionId,
 }:any) => {
   const [replyActive, setReplyActive] = useState(false);
 
@@ -491,8 +515,9 @@ const CommentItem = ({
             </span>
           </div>
         </div>
+
         {
-          replyActive && (
+          replyActive && questionId === item._id && (
             <>
               {item.questionReplies.map((item:any , index: number) => (
                 <div className='w-full flex 800px:ml-16 my-5 dark:text-[#edfff4] text-[#0F172A]' key={index}>

@@ -77,56 +77,58 @@ const AllInvoices = ({isDashboard}: Props) => {
     )
   ]
   
-  const rows: any = [
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-    {
-      id: 1,
-      userName: 'Jon Doe',
-      userEmail: 'adib.chiguer@gmail.com',
-      title: 'React Course',
-      price: '$100',
-      created_at: "2 hours ago"
-    },
-  ]
+  // const rows: any = [
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  //   {
+  //     id: 1,
+  //     userName: 'Jon Doe',
+  //     userEmail: 'adib.chiguer@gmail.com',
+  //     title: 'React Course',
+  //     price: '$100',
+  //     created_at: "2 hours ago"
+  //   },
+  // ]
+
+  const rows: any = []
 
   orderData && orderData.map((order: any) => {
     rows.push({

@@ -14,6 +14,7 @@ import avatar from "../../public/assets/avatar.jpg";
 import { useSession } from "next-auth/react";
 import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 type Props = {
   open: boolean;
@@ -26,7 +27,7 @@ type Props = {
 const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute}) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const { user } = useSelector((state:any) => state.auth);
+  const {data:userData , isLoading , refetch} = useLoadUserQuery(undefined, {})
   const { data , status } = useSession();
   const [socialAuth , {isSuccess , error}] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
@@ -35,23 +36,26 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
   });
 
   useEffect(() => {
-    if (!user){
-      if (data){
-        socialAuth({
-          email: data?.user?.email,
-          name: data?.user?.name,
-          avatar: data?.user?.image,
-        });
+    if (!isLoading){
+      if (!userData){
+        if (data){
+          socialAuth({
+            email: data?.user?.email,
+            name: data?.user?.name,
+            avatar: data?.user?.image,
+          });
+          refetch();
+        }
       }
     }
     if(data === null && isSuccess){
       toast.success("Logged in successfully");
     }
-    if(data === null && error){
+    if(data === null && error && !isLoading && !userData){
       setLogout(true);
     }
 
-  }, [data, user, status])
+  }, [data, userData, status])
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -100,10 +104,10 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                 />
               </div>
               {
-                user ? (
+                userData ? (
                   <Link href={"/profile"}>
                     <Image 
-                      src={user.avatar ? user.avatar.url : avatar }
+                      src={userData.avatar ? userData.avatar.url : avatar }
                       alt=""
                       width={30}
                       height={30}
@@ -132,11 +136,26 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
           >
             <div className="w-[70%] fixed z-[9999999999999] h-screen bg-white dark:bg-[#0F172A] dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
-              <HiOutlineUserCircle
-                className="cursor-pointer ml-5 my-2 dark:text-white text-[#0F172A]"
-                size={25}
-                onClick={() => setOpen(true)}
-              />
+              {
+                userData ? (
+                  <Link href={"/profile"}>
+                    <Image 
+                      src={userData.avatar ? userData.avatar.url : avatar }
+                      alt=""
+                      width={30}
+                      height={30}
+                      className="w-[30px] h-[30px] rounded-full cursor-pointer ml-[20px]"
+                      style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
+                    />
+                  </Link>
+                ) : (
+                  <HiOutlineUserCircle
+                    className="hidden 800px:block cursor-pointer dark:text-white text-[#0F172A]"
+                    size={30}
+                    onClick={() => setOpen(true)}
+                  />
+                )
+              }
               <br />
               <br />
               <p className="text-[16px] px-2 pl-5 text-[#0F172A] dark:text-white bottom-[20px] absolute">
@@ -157,6 +176,7 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                   setRoute={setRoute}
                   activeItem={activeItem}
                   component={Login}
+                  refetch={refetch}
                 />
               )
             }

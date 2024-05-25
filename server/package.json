@@ -17,6 +17,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.7",
     "@types/node-cron": "^3.0.11",
+    "@types/socket.io": "^3.0.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.1.0",
     "cookie-parser": "^1.4.6",
@@ -28,7 +29,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
     "node-cron": "^3.0.3",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.5",
