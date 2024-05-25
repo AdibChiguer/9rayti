@@ -152,46 +152,106 @@ const AllInvoices = ({isDashboard}: Props) => {
               m={isDashboard ? "0" : "40px 0 0 0"}
               height={isDashboard ? "35vh" : "90vh"}
               overflow={"hidden"}
+              // sx={{
+              //   "& .MuiDataGrid-root": {
+              //     border: "none",
+              //     outline: "none",
+              //   },
+              //   "& .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //   },
+              //   "& .MuiDataGrid-sortIcon": {
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //     borderBottom: theme === 'dark' ? '1px solid #ffffff30!important' : '1px solid #ccc!important',
+              //   },
+              //   "& .MuiTablePagination-root": {
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //   },
+              //   "& .MuiDataGrid-cell": {
+              //     borderBottom: "none!important",
+              //   },
+              //   "& .name-column--cell": {
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //   },
+              //   "& .MuiDataGrid-columnHeaders": {
+              //     backgroundColor: theme === 'dark' ? '#3e4396' : '#a4a9fc',
+              //     borderBottom: "none",
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //   },
+              //   "& .MuiDataGrid-virtualScroller": {
+              //     backgroundColor: theme === 'dark' ? '#1f2a40' : '#f2f0f0',
+              //   },
+              //   "& .MuiDataGrid-footerContainer": {
+              //     color: theme === 'dark' ? '#fff' : '#000',
+              //     borderTop: 'none',
+              //     backgroundColor: theme === 'dark' ? '#3e4396' : '#a4a9fc',
+              //   },
+              //   "& .MuiCheckbox-root": {
+              //     color: theme === 'dark' ? '#b7ebde !important' : '#000 !important',
+              //   },
+              //   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              //     color: '#fff !important',
+              //   },
+              // }}
               sx={{
                 "& .MuiDataGrid-root": {
                   border: "none",
                   outline: "none",
+                  background: "#2190FF !important",
+                  // backgroundColor: theme === "dark" ? "#1f2a40" : "#f2f0f0",
                 },
                 "& .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
-                  color: theme === 'dark' ? '#fff' : '#000',
+                  color: theme === "dark" ? "#fff" : "#000",
                 },
                 "& .MuiDataGrid-sortIcon": {
-                  color: theme === 'dark' ? '#fff' : '#000',
-                  borderBottom: theme === 'dark' ? '1px solid #ffffff30!important' : '1px solid #ccc!important',
+                  color: theme === "dark" ? "#fff" : "#000",
+                },
+                "& .MuiDataGrid-row": {
+                  color: theme === "dark" ? "#fff" : "#000",
+                  borderBottom:
+                    theme === "dark"
+                      ? "1px solid #ffffff30!important"
+                      : "1px solid #ccc!important",
                 },
                 "& .MuiTablePagination-root": {
-                  color: theme === 'dark' ? '#fff' : '#000',
+                  color: theme === "dark" ? "#fff" : "#000",
                 },
                 "& .MuiDataGrid-cell": {
-                  borderBottom: "none!important",
-                },
-                "& .name-column--cell": {
-                  color: theme === 'dark' ? '#fff' : '#000',
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: theme === 'dark' ? '#3e4396' : '#a4a9fc',
                   borderBottom: "none",
-                  color: theme === 'dark' ? '#fff' : '#000',
+                },
+                "& .name-colums--cell": {
+                  color: theme === "dark" ? "#fff" : "#000",
+                },
+                "& .MuiDataGrid-columnHeaders ": {
+                  backgroundColor: theme === "dark" ? "#3e4396 !important" : "#a4a9fc !important",
+                  borderBottom: "none",
+                  color: theme === "dark" ? "#fff" : "#000",
+                },
+                "& .css-n3fyjk-MuiDataGrid-root": {
+                  "--DataGrid-containerBackground": theme === "dark" ? "#3e4396 !important" : "#a4a9fc !important",
                 },
                 "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: theme === 'dark' ? '#1f2a40' : '#f2f0f0',
+                  backgroundColor: theme === "dark" ? "#1f2a40" : "#f2f0f0",
+                  color: theme === "dark" ? "#fff" : "#000",
                 },
                 "& .MuiDataGrid-footerContainer": {
-                  color: theme === 'dark' ? '#fff' : '#000',
-                  borderTop: 'none',
-                  backgroundColor: theme === 'dark' ? '#3e4396' : '#a4a9fc',
+                  color: theme === "dark" ? "#fff" : "#000",
+                  borderTop: "none",
+                  backgroundColor: theme === "dark" ? "#3e4396" : "#a4a9fc",
                 },
                 "& .MuiCheckbox-root": {
-                  color: theme === 'dark' ? '#b7ebde !important' : '#000 !important',
+                  color:
+                    theme === "dark" ? "#b7ebde !important" : "#000 !important",
                 },
                 "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                  color: '#fff !important',
+                  color: "#fff !important",
                 },
+                "& .css-1w53k9d-MuiDataGrid-overlay": {
+                  backgroundColor: theme === "dark" ? "#1f2a40" : "#f2f0f0",
+                },
+                ".css-1e6y48t-MuiButtonBase-root-MuiButton-root": {
+                  justifyContent: "flex-start",
+                }
               }}
             >
               <DataGrid

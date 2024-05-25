@@ -73,6 +73,8 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
     }
   };
 
+  console.log(userData?.user);
+
   return (
     <div className="w-full relative">
       <div
@@ -105,9 +107,9 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
               </div>
               {
                 userData ? (
-                  <Link href={"/profile"}>
+                  <Link href={"/profile"} className="md:hidden">
                     <Image 
-                      src={userData.avatar ? userData.avatar.url : avatar }
+                      src={userData?.user.avatar ? userData?.user.avatar.url : avatar }
                       alt=""
                       width={30}
                       height={30}
@@ -117,7 +119,7 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                   </Link>
                 ) : (
                   <HiOutlineUserCircle
-                    className="hidden 800px:block cursor-pointer dark:text-white text-[#0F172A]"
+                    className="hidden 800px:block cursor-pointer dark:text-white text-[#0F172A] md:hidden"
                     size={30}
                     onClick={() => setOpen(true)}
                   />
@@ -140,7 +142,7 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                 userData ? (
                   <Link href={"/profile"}>
                     <Image 
-                      src={userData.avatar ? userData.avatar.url : avatar }
+                      src={userData?.user.avatar ? userData?.user.avatar.url : avatar }
                       alt=""
                       width={30}
                       height={30}
@@ -150,7 +152,7 @@ const Header: React.FC<Props> = ({ activeItem, setOpen , route , open , setRoute
                   </Link>
                 ) : (
                   <HiOutlineUserCircle
-                    className="hidden 800px:block cursor-pointer dark:text-white text-[#0F172A]"
+                    className="800px:block cursor-pointer dark:text-white text-[#0F172A] ml-[20px]"
                     size={30}
                     onClick={() => setOpen(true)}
                   />

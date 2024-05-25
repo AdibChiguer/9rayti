@@ -194,12 +194,6 @@ export const updateAccessToken = CatchAsyncError(
 
       const session = await redis.get(decoded.id);
 
-      console.log({
-        "session": session,
-        "decoded.id": decoded.id,
-        "refreshToken": refreshToken,
-      });
-
       if (!session) {
         return next(new ErrorHandler(400, "Session expired or invalid. Please login again."));
       }

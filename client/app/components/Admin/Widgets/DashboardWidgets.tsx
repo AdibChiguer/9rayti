@@ -9,6 +9,7 @@ import {
   useGetOrdersAnalyticsQuery,
   useGetUsersAnalyticsQuery,
 } from "@/redux/features/analytics/analyticsApi";
+import Loader from "../../Loader/Loader";
 
 type Props = {
   open?: boolean;
@@ -67,12 +68,18 @@ const DashboardWidgets: FC<Props> = ({ open }) => {
           const ordersCurrentMonth = ordersLastTwoMonths[1].count;
           const ordersPreviousMonth = ordersLastTwoMonths[0].count;
 
-          const usersPercentChange = usersPreviousMonth !== 0 ?
-            ((usersCurrentMonth - usersPreviousMonth) / usersPreviousMonth) *
-            100 : 100;
-          const ordersPercentChange = ordersPreviousMonth !== 0 ?
-            ((ordersCurrentMonth - ordersPreviousMonth) / ordersPreviousMonth) *
-            100 : 100;
+          const usersPercentChange =
+            usersPreviousMonth !== 0
+              ? ((usersCurrentMonth - usersPreviousMonth) /
+                  usersPreviousMonth) *
+                100
+              : 100;
+          const ordersPercentChange =
+            ordersPreviousMonth !== 0
+              ? ((ordersCurrentMonth - ordersPreviousMonth) /
+                  ordersPreviousMonth) *
+                100
+              : 100;
 
           setUserComparePrecentage({
             currentMonth: usersCurrentMonth,
@@ -91,77 +98,91 @@ const DashboardWidgets: FC<Props> = ({ open }) => {
   }, [data, ordersData, isLoading, ordersLoading]);
 
   return (
-    <div className="mt-[30px] min-h-screen">
-      <div className="grid grid-cols-[75%,25%]">
-        <div className="p-8">
-          <UsersAnalytics isDashboard={true} />
-        </div>
+    <>
+      {isLoading && ordersLoading ? (
+        <Loader />
+      ) : (
+        <div className="mt-[30px] min-h-screen">
+          <div className="grid grid-cols-[75%,25%]">
+            <div className="p-8">
+              <UsersAnalytics isDashboard={true} />
+            </div>
 
-        <div className="pt-[80px] pr-8">
-          <div className="w-full dark:bg-[#111C43] rounded-sm shadow">
-            <div className="flex items-center p-5 justify-between">
-              <div>
-                <BiBorderLeft className="dark:text-[#45cba0] text-[#0F172A] text-[30px]" />
-                <h5 className="pt-2 font-Poppins dark:text-[#fff] text-[#0F172A] text-[20px] ">
-                  {orderComparePrecentage?.currentMonth}
-                </h5>
-                <h5 className="py-2 font-Poppins dark:text-[#45cba0] text-[#0F172A] text-[20px] font-[400]">
-                  Sales Obtained
-                </h5>
+            <div className="pt-[80px] pr-8">
+              <div className="w-full dark:bg-[#111C43] rounded-sm shadow">
+                <div className="flex items-center p-5 justify-between">
+                  <div>
+                    <BiBorderLeft className="dark:text-[#45cba0] text-[#0F172A] text-[30px]" />
+                    <h5 className="pt-2 font-Poppins dark:text-[#fff] text-[#0F172A] text-[20px] ">
+                      {orderComparePrecentage?.currentMonth}
+                    </h5>
+                    <h5 className="py-2 font-Poppins dark:text-[#45cba0] text-[#0F172A] text-[20px] font-[400]">
+                      Sales :
+                    </h5>
+                  </div>
+                  <div>
+                    <CircularProgressWithLabel
+                      value={
+                        orderComparePrecentage?.percentChange > 0 ? 100 : 0
+                      }
+                      open={open}
+                    />
+                    <h5 className="text-center pt-4">
+                      {orderComparePrecentage?.percentChange > 0
+                        ? `+${orderComparePrecentage?.percentChange.toFixed(
+                            2
+                          )}%`
+                        : `-${orderComparePrecentage?.percentChange.toFixed(
+                            2
+                          )}%`}
+                    </h5>
+                  </div>
+                </div>
               </div>
-              <div>
-                <CircularProgressWithLabel value={
-                  orderComparePrecentage?.percentChange > 0
-                    ? 100
-                    : 0
-                } open={open} />
-                <h5 className="text-center pt-4">
-                  {orderComparePrecentage?.percentChange > 0
-                    ? `+${orderComparePrecentage?.percentChange.toFixed(2)}%`
-                    : `-${orderComparePrecentage?.percentChange.toFixed(2)}%`}
-                </h5>
+
+              <div className="w-full dark:bg-[#111C43] rounded-sm shadow my-8">
+                <div className="flex items-center p-5 justify-between">
+                  <div>
+                    <PiUsersFourLight className="dark:text-[#45cba0] text-[#0F172A] text-[30px]" />
+                    <h5 className="pt-2 font-Poppins dark:text-[#fff] text-[#0F172A] text-[20px] ">
+                      {userComparePrecentage?.currentMonth}
+                    </h5>
+                    <h5 className="py-2 font-Poppins dark:text-[#45cba0] text-[#0F172A] text-[20px] font-[400]">
+                      New Users
+                    </h5>
+                  </div>
+                  <div>
+                    <CircularProgressWithLabel
+                      value={userComparePrecentage?.percentChange > 0 ? 100 : 0}
+                      open={open}
+                    />
+                    <h5 className="text-center pt-4">
+                      {userComparePrecentage?.percentChange > 0
+                        ? `+${userComparePrecentage?.percentChange.toFixed(2)}%`
+                        : `-${userComparePrecentage?.percentChange.toFixed(
+                            2
+                          )}%`}
+                    </h5>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full dark:bg-[#111C43] rounded-sm shadowmy-8">
-            <div className="flex items-center p-5 justify-between">
-              <div>
-                <PiUsersFourLight className="dark:text-[#45cba0] text-[#0F172A] text-[30px]" />
-                <h5 className="pt-2 font-Poppins dark:text-[#fff] text-[#0F172A] text-[20px] ">
-                  {userComparePrecentage?.currentMonth}
-                </h5>
-                <h5 className="py-2 font-Poppins dark:text-[#45cba0] text-[#0F172A] text-[20px] font-[400]">
-                  New Users
-                </h5>
-              </div>
+          <div className="grid grid-cols-[60%,40%] mt-[-20px]">
+            <div className="dark:bg-[#111c43] w-[100%] mt-[30px] h-[40vh] shadow-sm m-auto py-2">
+              <OrdersAnalytics isDashboard={true} />
             </div>
-            <CircularProgressWithLabel value={
-              userComparePrecentage?.percentChange > 0
-                ? 100
-                : 0
-            } open={open} />
-            <h5 className="text-center pt-4">
-              {userComparePrecentage?.percentChange > 0
-                ? `+${userComparePrecentage?.percentChange.toFixed(2)}%`
-                : `-${userComparePrecentage?.percentChange.toFixed(2)}%`}
-            </h5>
+            <div className="p-5">
+              <h5 className="dark:text-[#fff] text-[#0F172A] text-[20px] font-[400] font-Poppins pb-3">
+                Recent Transactions
+              </h5>
+              <AllInvoices isDashboard={true} />
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-[65%,35%] mt-[-20px]">
-        <div className="dark:bg-[#111c43] w-[94%] mt-[30px] h-[40vh] shadow-sm m-auto">
-          <OrdersAnalytics isDashboard={true} />
-        </div>
-        <div className="p-5">
-          <h5 className="dark:text-[#fff] text-[#0F172A] text-[20px] font-[400] font-Poppins pb-3">
-            Recent Transactions
-          </h5>
-          <AllInvoices isDashboard={true} />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

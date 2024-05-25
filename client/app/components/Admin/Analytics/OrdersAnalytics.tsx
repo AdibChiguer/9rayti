@@ -44,9 +44,9 @@ const OrdersAnalytics = ({ isDashboard }: Props) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className={isDashboard ? "h-[30vh]" : "h-screen"}>
-          <div className={isDashboard ? "mt-[0px] pl-[40px] mb-2" : "mt-[50px]" }>
-            <h1 className={`${styles.title} ${isDashboard && "!text-[20px]"} px-5 !text-start`}>
+        <div className={isDashboard ? "" : "h-screen"}>
+          <div className={isDashboard ? "mt-[0px] pl-4 mb-4" : "mt-[50px]" }>
+            <h1 className={`${styles.title} ${isDashboard && "!text-[20px]"} px-5 !text-start my-[unset]`}>
               Orders Analytics
             </h1>
             {
@@ -58,11 +58,11 @@ const OrdersAnalytics = ({ isDashboard }: Props) => {
             }
           </div>
 
-          <div className={`w-full ${!isDashboard ? "h-[90%]" : "h-full" } flex items-center justify-center`}>
-            <ResponsiveContainer width={isDashboard ? "100%" : "90%" } height={isDashboard ? "100%" : "50%" }>
+          <div className={`w-full ${isDashboard ? "h-[30vh]" : "h-screen" } flex items-center justify-center ml-[-10px]`}>
+            <ResponsiveContainer width={isDashboard ? "100%" : "90%" } height={!isDashboard ? "50%" : "100%" }>
               <LineChart 
-                width={500}
-                height={300}
+                // width={500}
+                // height={300}
                 data={analyticsData}
                 margin={{
                   top: 5,

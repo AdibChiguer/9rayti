@@ -33,7 +33,7 @@ const CourseContentList: FC<Props> = (props) => {
   return (
     <div
       className={`mt-[15px] w-full ${
-        !props.isDemo && " sticky top-24 left-0 z-30"
+        !props.isDemo && " sticky top-24 left-0 z-30 md:m-auto md:w-[95%]"
       }`}
     >
       {videoSections.map((section: string, index: number) => {
@@ -93,7 +93,7 @@ const CourseContentList: FC<Props> = (props) => {
                   return (
                     <div
                       className={`w-full ${
-                        videoIndex === props.activeVideo ? "bg-slate-800" : ""
+                        videoIndex === props.activeVideo ? "dark:bg-slate-800 bg-[#E0E3E8]" : ""
                       } cursor-pointer transition-all p-2`}
                       key={item._id}
                       onAbort={() =>

@@ -27,6 +27,9 @@ const ChangePassword: FC<Props> = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Password updated successfully");
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
     }
     if (error) {
       if ("data" in error) {

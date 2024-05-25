@@ -45,9 +45,9 @@ const UsersAnalytics = ({isDashboard}: Props) => {
         isLoading ? (
           <Loader />
         ) : (
-          <div className={`${!isDashboard ? "mt-[50px]" : "mt-[50px] dark:bg-[#111c43] shadow-sm pb-5 rounded-sm"}`}>
-            <div className={`${isDashboard ? "!ml-8 mb-5" : ""}`}>
-              <h1 className={`${styles.title} ${isDashboard && "!text-[20px] px-5 !text-start"}`}>
+          <div className={`${!isDashboard ? "mt-[50px]" : "mt-[50px] dark:bg-[#111c43] shadow-sm pb-5 rounded-sm py-4"}`}>
+            <div className={`${isDashboard ? "!ml-4 mb-4" : ""}`}>
+              <h1 className={`${styles.title} ${isDashboard && "!text-[20px] px-5 !text-start !my-[unset]"}`}>
                 Users Analytics
               </h1>
               {
@@ -58,7 +58,7 @@ const UsersAnalytics = ({isDashboard}: Props) => {
                 )
               }
             </div>
-            <div className={`w-full ${isDashboard ? 'h-[30vh]' : 'h-screen'} flex items-center justify-center`}>
+            <div className={`w-full ${isDashboard ? 'h-[30vh]' : 'h-screen'} flex items-center justify-center ml-[-10px]`}>
               <ResponsiveContainer width={isDashboard ? "100%" : "90%"} height={!isDashboard ? "50%" : "100%"}>
                 <AreaChart
                   data={analyticsData}
