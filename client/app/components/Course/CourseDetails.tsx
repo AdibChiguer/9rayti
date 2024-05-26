@@ -69,7 +69,6 @@ const CourseDetails = ({ data , setOpen: openAuthModel , setRoute }: Props) => {
       if ("data" in error) {
         const errorMessage = error as any;
         toast.error(errorMessage.data.message);
-        console.log(errorMessage);
       }
     }
   }, [orderData , error]);

@@ -16,15 +16,6 @@ type Props = {};
 
 const CourseAnalytics = (props: Props) => {
   const { data, isLoading } = useGetCoursesAnalyticsQuery({});
-  // const analyticsData = [
-  //   { name: "Jun 2023" , uv : 4},
-  //   { name: "Jul 2023" , uv : 5},
-  //   { name: "Aug 2023" , uv : 6},
-  //   { name: "Sep 2023" , uv : 7},
-  //   { name: "Oct 2023" , uv : 3},
-  //   { name: "Nov 2023" , uv : 9},
-  //   { name: "Dec 2023" , uv : 5},
-  // ]
 
   const analyticsData: any = [];
 
@@ -43,9 +34,9 @@ const CourseAnalytics = (props: Props) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="h-screen">
-          <div className="mt-[50px]">
-            <h1 className={`${styles.title} px-5 !text-start`}>
+        <div className="h-[100%]">
+          <div className="pt-[50px] pl-[35px]">
+            <h1 className={`${styles.title} px-5 !text-start my-[unset]`}>
               Course Analytics
             </h1>
             <p className={`${styles.label} px-5`}>
@@ -53,9 +44,9 @@ const CourseAnalytics = (props: Props) => {
             </p>
           </div>
 
-          <div className="w-full h-[90%] flex items-center justify-center">
-            <ResponsiveContainer width="90%" height="50%">
-              <BarChart>
+          <div className="w-full h-[70vh] flex items-center justify-center ml-[-10px]">
+            <ResponsiveContainer width="90%" height="90%" className="mb-[-45px]">
+              <BarChart data={analyticsData}>
                 <XAxis dataKey="name">
                   <Label offset={0} position="insideBottom" />
                 </XAxis>

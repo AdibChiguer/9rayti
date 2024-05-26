@@ -14,14 +14,14 @@ type Props = {
 };
 
 const DashboardHeader: FC<Props> = ({open , setOpen}) => {
-  const {data , refetch} = useGetAllNotificationsQuery( undefined , { refetchOnMountOrArgChange: true });
+  const {data , refetch} = useGetAllNotificationsQuery(undefined , { refetchOnMountOrArgChange: true });
   const [updateNotificationStatus , {isSuccess}] = useUpdateNotificationStatusMutation();
   const [notifications , setNotifications] = useState<any>([]);
   const [audio] = useState(
     new Audio(
       "https://res.cloudinary.com/doauco5er/video/upload/f_auto:video,q_auto/uxwzzahnsjg7dingxkii"
     )
-  )
+  );
 
   const playNotificationSound = () => {
     audio.play();
@@ -47,7 +47,7 @@ const DashboardHeader: FC<Props> = ({open , setOpen}) => {
   }, []);
 
   const handleNotificationStatusChange = async (id: string) => {
-    await updateNotificationStatus(id);
+    await updateNotificationStatus({ id });
   }
 
   return (
@@ -63,13 +63,13 @@ const DashboardHeader: FC<Props> = ({open , setOpen}) => {
         </span>
       </div>
       {open && (
-        <div className="w-[350px] h-[50vh] dark:bg-[#111c43] bg-white shadow-xl absolute top-16 z-10 rounded-[10px]">
+        <div className="w-[430px] h-[50vh] dark:bg-[#111C43] bg-white shadow-xl absolute top-16 z-10 rounded-[10px] overflow-y-auto p-2">
           <h5 className="text-center text-[20px] font-Poppins text-black dark:text-white p-3">
             Notifications
           </h5>
           {
             notifications && notifications.map((notification: any , index : number) => (
-              <div className="dark:bg-[#2d3a4ea1] bg-[#00000013] font-Poppins border-b dark:border-b-[#ffffff47] border-b-[#000000f] w-[340px] m-auto rounded-[10px]" key={index}>
+              <div className="dark:bg-[#2d3a4ea1] bg-[#00000013] font-Poppins border-b dark:border-b-[#ffffff47] border-b-[#000000f] w-[95%] m-auto rounded-[10px] mb-2" key={index}>
                 <div className="w-full flex items-center justify-between p-2">
                   <p className="text-[#111c43] dark:text-white">
                     {notification.title}

@@ -16,17 +16,6 @@ type Props = {
   isDashboard?: boolean;
 }
 
-// const analyticsData = [
-//   { name: "Jun 2023" , count : 434},
-//   { name: "Jul 2023" , count : 52},
-//   { name: "Aug 2023" , count : 644},
-//   { name: "Sep 2023" , count : 79},
-//   { name: "Oct 2023" , count : 36},
-//   { name: "Nov 2023" , count : 95},
-//   { name: "Dec 2023" , count : 522},
-// ];
-
-
 const UsersAnalytics = ({isDashboard}: Props) => {
   const { data, isLoading } = useGetUsersAnalyticsQuery({});
   
@@ -45,9 +34,9 @@ const UsersAnalytics = ({isDashboard}: Props) => {
         isLoading ? (
           <Loader />
         ) : (
-          <div className={`${!isDashboard ? "mt-[50px]" : "mt-[50px] dark:bg-[#111c43] shadow-sm pb-5 rounded-sm py-4"}`}>
-            <div className={`${isDashboard ? "!ml-4 mb-4" : ""}`}>
-              <h1 className={`${styles.title} ${isDashboard && "!text-[20px] px-5 !text-start !my-[unset]"}`}>
+          <div className={`${!isDashboard ? "" : "mt-[50px] dark:bg-[#111c43] shadow-sm pb-5 rounded-sm py-4"}`}>
+            <div className={`${isDashboard ? "!ml-4 mb-4" : "pt-[50px] pl-[35px]"}`}>
+              <h1 className={`${styles.title} ${isDashboard && "!text-[20px]"} px-5 !text-start !my-[unset]`}>
                 Users Analytics
               </h1>
               {
@@ -58,8 +47,8 @@ const UsersAnalytics = ({isDashboard}: Props) => {
                 )
               }
             </div>
-            <div className={`w-full ${isDashboard ? 'h-[30vh]' : 'h-screen'} flex items-center justify-center ml-[-10px]`}>
-              <ResponsiveContainer width={isDashboard ? "100%" : "90%"} height={!isDashboard ? "50%" : "100%"}>
+            <div className={`w-full ${isDashboard ? 'h-[30vh]' : 'h-[70vh]'} flex items-center justify-center ml-[-10px]`}>
+              <ResponsiveContainer width={isDashboard ? "100%" : "90%"} height={!isDashboard ? "90%" : "100%"} className={`${!isDashboard && "mb-[-45px]"}`}>
                 <AreaChart
                   data={analyticsData}
                   margin={{

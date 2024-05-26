@@ -113,62 +113,69 @@ export const editLayout = CatchAsyncError(
     try {
       const { type } = req.body;
       if (!type) {
-        return next(new ErrorHandler(404, "Layout not found"));
+        return next(new ErrorHandler(404, "Layout type not provided"));
       }
 
       if (type === "Banner") {
-        const bannerData: any = await LayoutModel.findById({ type: "Banner" });
+        const bannerData: any = await LayoutModel.findOne({ type: "Banner" });
+
+        if (!bannerData) {
+          return next(new ErrorHandler(404, "Banner layout not found"));
+        }
 
         const { title, subTitle, image } = req.body;
 
-        if (bannerData) {
-          await cloudinary.v2.uploader.destroy(bannerData.image.public_id);
-        }
+        // if (bannerData.banner.image && bannerData.banner.image.public_id) {
+        //   await cloudinary.v2.uploader.destroy(bannerData.banner.image.public_id);
+        // }
 
-        const data = image.startsWith("https") ? bannerData : await cloudinary.v2.uploader.upload(image, {
-          folder: "layout",
-        });
+        // const data = image.startsWith("https") ? bannerData.banner.image : await cloudinary.v2.uploader.upload(image, {
+        //   folder: "layout",
+        // });
 
         const banner = {
           type: "Banner",
-          image: {
-            public_id: image.startsWith("https") ? bannerData.banner.image.public_id : data?.public_id,
-            url: image.startsWith("https") ? bannerData.banner.image.url : data?.secure_url,
-          },
+          // image: {
+          //   public_id: image.startsWith("https") ? bannerData.banner.image.public_id : data.public_id,
+          //   url: image.startsWith("https") ? bannerData.banner.image.url : data.secure_url,
+          // },
           title,
           subTitle,
         };
 
-        await LayoutModel.findByIdAndUpdate(bannerData?._id, { banner });
-        
+        await LayoutModel.findByIdAndUpdate(bannerData._id, { banner });
+
       } else if (type === "FAQ") {
         const { faq } = req.body;
-        const faqData: any = await LayoutModel.findById({ type: "FAQ" });
-        const faqItems = await Promise.all(
-          faq.map(async (item: any) => {
-            return {
-              question: item.question,
-              answer: item.answer,
-            };
-          })
-        );
-        await LayoutModel.findByIdAndUpdate(faqData?._id, {
+        const faqData: any = await LayoutModel.findOne({ type: "FAQ" });
+
+        if (!faqData) {
+          return next(new ErrorHandler(404, "FAQ layout not found"));
+        }
+
+        const faqItems = faq.map((item: any) => ({
+          question: item.question,
+          answer: item.answer,
+        }));
+
+        await LayoutModel.findByIdAndUpdate(faqData._id, {
           type: "FAQ",
           faq: faqItems,
         });
+
       } else if (type === "Categories") {
         const { categories } = req.body;
-        const categoriesData: any = await LayoutModel.findById({
-          type: "Categories",
-        });
-        const categoriesItems = await Promise.all(
-          categories.map(async (item: any) => {
-            return {
-              title: item.title,
-            };
-          })
-        );
-        await LayoutModel.findByIdAndUpdate(categoriesData?._id, {
+        const categoriesData: any = await LayoutModel.findOne({ type: "Categories" });
+
+        if (!categoriesData) {
+          return next(new ErrorHandler(404, "Categories layout not found"));
+        }
+
+        const categoriesItems = categories.map((item: any) => ({
+          title: item.title,
+        }));
+
+        await LayoutModel.findByIdAndUpdate(categoriesData._id, {
           type: "Categories",
           categories: categoriesItems,
         });
@@ -183,7 +190,6 @@ export const editLayout = CatchAsyncError(
     }
   }
 );
-
 // get Layout by type
 export const getLayoutByType = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {

@@ -33,13 +33,8 @@ app.use(
   orderRouter,
   notificationRouter,
   analyticsRouter,
-  layoutRouter
+  layoutRouter,
 );
-
-// testing api
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({ message: "Hello World!" });
-});
 
 // unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

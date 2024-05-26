@@ -154,13 +154,6 @@ const AdminSidebar:FC<Props> = ({selectedItem}) => {
                 >
                   {user?.name}
                 </Typography>
-                {/* <Typography
-                  variant='h6'
-                  sx={{ m: "10px 0 0 0"}}
-                  className='!text-[20px] text-[#0F172A] dark:text-[#ffffffc1]  capitalize'
-                >
-                   - {user?.role} 
-                </Typography> */}
               </Box>
             </Box>
           )}
@@ -287,36 +280,12 @@ const AdminSidebar:FC<Props> = ({selectedItem}) => {
             />
 
             <Item 
-              title='User Analytics'
-              to='/admin/user-analytics'
+              title='Users Analytics'
+              to='/admin/users-analytics'
               icon={<ManageHistoryIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
-            <Typography
-              variant='h6'
-              className='!text-[18px] text-[#0F172A] dark:text-[#ffffffc1] capitalize !font-[400]'
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              {!isCollapsed && "Extras"}
-            </Typography>
-            <Item 
-              title='Settings'
-              to='/admin/settings'
-              icon={<SettingsIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item 
-              title='Logout'
-              to='/'
-              icon={<ExitToAppIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
           </Box>
 
         </Menu>

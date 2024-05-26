@@ -21,7 +21,7 @@ export const getNotifications = CatchAsyncError(async (req: Request , res: Respo
 export const updateNotificationStatus = CatchAsyncError(async (req: Request , res: Response , next: NextFunction) => {
   try {
     const notification = await NotificationModel.findById(req.params.id);
-    
+
     if(!notification) {
       return next(new ErrorHandler(404 , 'Notification not found'));
     } else {

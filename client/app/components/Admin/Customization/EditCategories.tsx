@@ -12,28 +12,36 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 type Props = {};
 
 const EditCategories = (props: Props) => {
-  const { data, isLoading , refetch } = useGetHeroDataQuery("Categories", {
+  const { data, isLoading, refetch } = useGetHeroDataQuery("Categories", {
     refetchOnMountOrArgChange: true,
   });
 
   const [editLayout, { isSuccess, error }] = useEditLayoutMutation();
   const [categories, setCategories] = useState<any[]>([]);
+  const [originalCategories, setOriginalCategories] = useState<any[]>([]);
 
   useEffect(() => {
     if (data) {
       setCategories(data.layout.categories);
+      setOriginalCategories(data.layout.categories);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (isSuccess) {
       refetch();
       toast.success("Categories updated successfully");
     }
+  }, [isSuccess, refetch]);
+
+  useEffect(() => {
     if (error) {
       if ("data" in error) {
         const errorData = error as any;
         toast.error(errorData?.data?.message);
       }
     }
-  }, [data, isSuccess, error]);
+  }, [error]);
 
   const handleCategoriesAdd = (id: any, value: string) => {
     setCategories((prevCategory: any) =>
@@ -42,18 +50,21 @@ const EditCategories = (props: Props) => {
   };
 
   const newCategoriesHandler = () => {
-    if (categories[categories.length - 1].title === "") {
+    if (categories[categories.length - 1]?.title === "") {
       return toast.error("Category title cannot be empty");
     } else {
-      setCategories((prevCategory: any) => [...prevCategory, { title: "" }]);
+      setCategories((prevCategory: any) => [
+        ...prevCategory,
+        { _id: Date.now().toString(), title: "" },
+      ]);
     }
   };
 
-  const areCategoriesUnchnaged = (
+  const areCategoriesUnchanged = (
     oldCategories: any[],
     newCategories: any[]
   ) => {
-    return JSON.stringify(oldCategories) === JSON.stringify(newCategories);
+    return JSON.stringify(oldCategories.map(c => ({ title: c.title }))) === JSON.stringify(newCategories.map(c => ({ title: c.title })));
   };
 
   const isAnyCategoryTitleEmpty = (categories: any[]) => {
@@ -62,7 +73,7 @@ const EditCategories = (props: Props) => {
 
   const editCategoriesHandler = async () => {
     if (
-      !areCategoriesUnchnaged(data.layout.categories, categories) &&
+      !areCategoriesUnchanged(originalCategories, categories) &&
       !isAnyCategoryTitleEmpty(categories)
     ) {
       await editLayout({ type: "Categories", categories });
@@ -114,13 +125,13 @@ const EditCategories = (props: Props) => {
             className={`${
               styles.button
             } !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-[#0F172A] bg-[#cccccc34] ${
-              areCategoriesUnchnaged(data.layout.categories, categories) ||
+              areCategoriesUnchanged(originalCategories, categories) ||
               isAnyCategoryTitleEmpty(categories)
                 ? "cursor-not-allowed"
                 : "cursor-pointer !bg-[#42d383]"
             } !rounded absolute bottom-12 right-12`}
             onClick={
-              areCategoriesUnchnaged(data.layout.categories, categories) ||
+              areCategoriesUnchanged(originalCategories, categories) ||
               isAnyCategoryTitleEmpty(categories)
                 ? () => null
                 : editCategoriesHandler

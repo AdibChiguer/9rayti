@@ -23,16 +23,9 @@ const Page = (props: Props) => {
   const [category, setCategory] = useState("All");
 
   useEffect(() => {
-    console.log({
-      data: data,
-      categoriesData,
-    });
     if (category === "All") {
       setCourses(data?.courses);
     } else {
-
-      console.log( category , data?.courses?.filter((course: any) => course.categories === category));
-
       setCourses(
         data?.courses?.filter((course: any) => course.categories === category)
       );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   ResponsiveContainer,
   XAxis,
@@ -19,16 +19,6 @@ type Props = {
 
 const OrdersAnalytics = ({ isDashboard }: Props) => {
   const { data , isLoading } = useGetOrdersAnalyticsQuery({});
-  // const analyticsData = [
-  //   { name: "Jun 2023" , uv : 4},
-  //   { name: "Jul 2023" , uv : 5},
-  //   { name: "Aug 2023" , uv : 6},
-  //   { name: "Sep 2023" , uv : 7},
-  //   { name: "Oct 2023" , uv : 3},
-  //   { name: "Nov 2023" , uv : 9},
-  //   { name: "Dec 2023" , uv : 5},
-  // ]
-
   const analyticsData: any = [];
 
   data &&
@@ -44,8 +34,8 @@ const OrdersAnalytics = ({ isDashboard }: Props) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className={isDashboard ? "" : "h-screen"}>
-          <div className={isDashboard ? "mt-[0px] pl-4 mb-4" : "mt-[50px]" }>
+        <div className={isDashboard ? "" : "h-[100%]"}>
+          <div className={isDashboard ? "mt-[0px] pl-4 mb-4" : "pt-[50px] pl-[35px]" }>
             <h1 className={`${styles.title} ${isDashboard && "!text-[20px]"} px-5 !text-start my-[unset]`}>
               Orders Analytics
             </h1>
@@ -58,8 +48,8 @@ const OrdersAnalytics = ({ isDashboard }: Props) => {
             }
           </div>
 
-          <div className={`w-full ${isDashboard ? "h-[30vh]" : "h-screen" } flex items-center justify-center ml-[-10px]`}>
-            <ResponsiveContainer width={isDashboard ? "100%" : "90%" } height={!isDashboard ? "50%" : "100%" }>
+          <div className={`w-full ${isDashboard ? "h-[30vh]" : "h-[70vh]" } flex items-center justify-center ml-[-10px]`}>
+            <ResponsiveContainer width={isDashboard ? "100%" : "90%" } height={!isDashboard ? "90%" : "100%" } className={`${!isDashboard && "mb-[-45px]"}`}>
               <LineChart 
                 // width={500}
                 // height={300}

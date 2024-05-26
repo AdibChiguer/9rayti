@@ -1,4 +1,4 @@
-import React, { FC, use, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import CourseInformation from "./CourseInformation";
 import CourseOptions from "./CourseOptions";
 import CourseData from "./CourseData";
@@ -7,7 +7,6 @@ import CoursePreview from "./CoursePreview";
 import { useEditCourseMutation, useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
-import { useParams } from "next/navigation";
 
 type Props = {
   id: string;
@@ -17,7 +16,6 @@ const EditCourse:FC<Props> = ({id}) => {
   const [editCourse , {isSuccess , error}] = useEditCourseMutation();
   const { data , refetch} = useGetAllCoursesQuery({}, {refetchOnMountOrArgChange: true});
   const editCourseData = data && data.courses.find((course:any) => course._id === id);
-  // console.log("data" +data)
 
   useEffect(() => {
     if (isSuccess) {
@@ -52,7 +50,6 @@ const EditCourse:FC<Props> = ({id}) => {
     }
   }, [editCourseData]);
 
-  // console.log("Edit:" + editCourseData);
   const [courseInfo, setCourseInfo] = useState({
     name: "",
     description: "",
@@ -125,11 +122,9 @@ const EditCourse:FC<Props> = ({id}) => {
   
   const handleCourseCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Edit:" + editCourseData);
     await editCourse({ id: editCourseData?._id, data: courseData });
   }  
-  
-  // console.log(courseContentData);
+
   return (
     <div className="w-full flex min-h-screen">
       <div className="w-[80%]">

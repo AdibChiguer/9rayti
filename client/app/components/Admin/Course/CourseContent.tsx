@@ -332,7 +332,7 @@ const CourseContent: FC<Props> = ({
                     </div>
                   ))}
 
-                  <div className="inline-block mb-4 mt-1 bg-green-500">
+                  <div className="inline-block mb-4 mt-1">
                     <p
                       className="flex items-center text-[18px] dark:text-white text-[#0F172A] cursor-pointer"
                       onClick={() => handleAddLink(courseContentIndex)}

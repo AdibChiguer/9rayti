@@ -17,11 +17,11 @@ const page = (props: Props) => {
           description="View analytics for all courses"
           keywords="course, analytics, admin, dashboard, view, all, courses"
         />
-        <div className="flex h-screen">
+        <div className="flex">
           <div className="1500px:w-[16%] w-1/5">
-            <AdminSidebar selectedItem="Courses Analytics" />
+            <AdminSidebar selectedItem="Orders Analytics" />
           </div>
-          <div className="w-[85%]">
+          <div className="w-[85%] h-screen">
             <DashboardHeader />
             <OrdersAnalytics />
           </div>
